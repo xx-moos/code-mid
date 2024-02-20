@@ -9,6 +9,7 @@ import IconsResolver from "unplugin-icons/resolver";
 import { VantResolver } from "unplugin-vue-components/resolvers";
 import chalk from "chalk"; // console高亮
 import legacyPlugin from "@vitejs/plugin-legacy";
+import esbuild from "rollup-plugin-esbuild";
 
 // 引入多页面配置文件
 const project = require("./scripts/multiPages.json");
@@ -84,7 +85,8 @@ export default defineConfig({
 
         // 浏览器兼容问题配置
         legacyPlugin({
-            targets: ["defaults", "not IE 11", "chrome 37", "chrome 40", "firefox 49"],
+            targets: ["defaults", "not IE 11", "chrome>=60"],
+            modernTargets: ["defaults", "not IE 11", "chrome>=60"],
             additionalLegacyPolyfills: ["regenerator-runtime/runtime"],
             renderLegacyChunks: true,
             polyfills: [
@@ -121,8 +123,8 @@ export default defineConfig({
         https: false, // 是否开启 https
     },
     build: {
-        target: ["chrome52"],
-        cssTarget: ["chrome52"],
+        target: ["chrome60"],
+        cssTarget: ["chrome60"],
         outDir: path.resolve(__dirname, `dist/${npm_config_page}`), // 指定输出路径
         assetsInlineLimit: 4096, //小于此阈值的导入或引用资源将内联为 base64 编码，以避免额外的 http 请求
         emptyOutDir: true, //Vite 会在构建时清空该目录

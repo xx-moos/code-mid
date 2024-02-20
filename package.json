@@ -24,6 +24,8 @@
         "es6-promise": "^4.2.8",
         "minimist": "^1.2.8",
         "postcss-pxtorem": "^6.1.0",
+        "rollup-plugin-esbuild": "^6.1.1",
+        "terser": "^5.27.2",
         "vant": "^3.4.3",
         "vue": "^3.3.11",
         "vue-router": "^4.2.5"
