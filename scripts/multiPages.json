@@ -1,0 +1,5 @@
+[
+    { "chunk": "page1", "chunkName": "测试页面" },
+    { "chunk": "page2", "chunkName": "测试页面2" },
+    { "chunk": "host", "chunkName": "主框架" }
+]
