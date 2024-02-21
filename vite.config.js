@@ -85,29 +85,42 @@ export default defineConfig({
 
         // 浏览器兼容问题配置
         legacyPlugin({
-            targets: ["defaults", "not IE 11", "chrome>=60"],
-            modernTargets: ["defaults", "not IE 11", "chrome>=60"],
+            // targets: ["chrome >= 52"],
+            targets: ["defaults", "ie >= 11", "chrome >= 60"],
             additionalLegacyPolyfills: ["regenerator-runtime/runtime"],
-            renderLegacyChunks: true,
-            polyfills: [
-                "es.promise",
-                "es.promise.finally",
-                "es/map",
-                "es/set",
-                "es.array.filter",
-                "es.array.for-each",
-                "es.array.flat-map",
-                "es.object.define-properties",
-                "es.object.define-property",
-                "es.object.get-own-property-descriptor",
-                "es.object.get-own-property-descriptors",
-                "es.object.keys",
-                "es.object.to-string",
-                "web.dom-collections.for-each",
-                "esnext.global-this",
-                "esnext.string.match-all",
-            ],
+            // modernPolyfills: true,
+            // polyfills: [
+            //     "es.promise",
+            //     "es.promise.finally",
+            //     "es/map",
+            //     "es/set",™
+            //     "es.array.filter",
+            //     "es.array.for-each",
+            //     "es.array.flat-map",
+            //     "es.object.define-properties",
+            //     "es.object.define-property",
+            //     "es.object.get-own-property-descriptor",
+            //     "es.object.get-own-property-descriptors",
+            //     "es.object.keys",
+            //     "es.object.to-string",
+            //     "web.dom-collections.for-each",
+            //     "esnext.global-this",
+            //     "esnext.string.match-all",
+            // ],
         }),
+
+        // 开发的时候也兼容
+        // {
+        //     ...esbuild({
+        //         target: "chrome52",
+        //         // 如有需要可以在这里加 js ts 之类的其他后缀
+        //         include: /\.vue$/,
+        //         loaders: {
+        //             ".vue": "js",
+        //         },
+        //     }),
+        //     enforce: "post",
+        // },
     ],
     resolve: {
         alias: {
@@ -123,8 +136,7 @@ export default defineConfig({
         https: false, // 是否开启 https
     },
     build: {
-        target: ["chrome60"],
-        cssTarget: ["chrome60"],
+        minify: "terser",
         outDir: path.resolve(__dirname, `dist/${npm_config_page}`), // 指定输出路径
         assetsInlineLimit: 4096, //小于此阈值的导入或引用资源将内联为 base64 编码，以避免额外的 http 请求
         emptyOutDir: true, //Vite 会在构建时清空该目录

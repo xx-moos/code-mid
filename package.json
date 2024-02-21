@@ -4,9 +4,9 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "dev": "vite dev",
+        "dev": "vite dev --host",
         "build": "vite build",
-        "preview": "vite preview",
+        "preview": "vite preview --host",
         "new:page": "node ./scripts/index.mjs"
     },
     "dependencies": {
@@ -20,9 +20,8 @@
         "axios": "^1.6.7",
         "babel-polyfill": "^6.26.0",
         "chalk": "^4.1.2",
-        "element-plus": "^2.5.2",
         "es6-promise": "^4.2.8",
-        "minimist": "^1.2.8",
+        "less": "^4.2.0",
         "postcss-pxtorem": "^6.1.0",
         "rollup-plugin-esbuild": "^6.1.1",
         "terser": "^5.27.2",
@@ -43,7 +42,6 @@
         "husky": "^8.0.3",
         "lint-staged": "^15.2.0",
         "prettier": "^3.2.4",
-        "sass": "^1.70.0",
         "unplugin-auto-import": "^0.17.3",
         "unplugin-icons": "^0.18.2",
         "unplugin-vue-components": "^0.26.0",
@@ -52,8 +50,6 @@
         "vite-plugin-svg-icons": "^2.0.1"
     },
     "browserslist": [
-        "> 1%",
-        "last 2 versions",
-        "not ie <= 11"
+        "Chrome >= 60"
     ]
 }

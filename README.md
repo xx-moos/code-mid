@@ -59,9 +59,7 @@ npm run new:page
 //注意：router/index.js 路径名暂时无法根据创建的文件名同步更改，需要手动在创建的页面/模块中修改
 
 [
-  { "chunk": "pageone", "chunkName": "页面1"},
-  { "chunk": "pagetwo", "chunkName": "页面2" },
-  { "chunk": "pagethree", "chunkName": "页面3" }
+  { "chunk": "dy", "chunkName": "抖音"},
 ]
 ```
 
