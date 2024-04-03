@@ -29,7 +29,8 @@
         {
             "src": "images/homescreen168.png",
             "sizes": "168x168",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "maskable"
         }
     ]
 }
