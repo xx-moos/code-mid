@@ -197,6 +197,10 @@ const App = () => {
                             className="btn btn-dark"
                             style={{ height: "40px" }}
                             onClick={(e) => {
+                                if (state.input === '') {
+                                    return;
+                                }
+
                                 if (state.row.id) {
                                     state.row.name = state.input;
                                     state.list = state.list.map((item) =>
@@ -361,21 +365,5 @@ const App = () => {
         </>
     );
 };
-
-// function photoedTask(id) {
-//     console.log("photoedTask", id);
-//     const photoedTaskList = tasks.map((task) => {
-//         // if this task has the same ID as the edited task
-
-//         if (id === task.id) {
-//             // 1 à Set photo property to true for a task identified by id when a photo for that
-//             // task is saved.
-//             return { ...task, photo: true };
-//         }
-//         return task;
-//     });
-//     console.log(photoedTaskList);
-//     setTasks(photoedTaskList); // 2 à Update your tasks list appending the task with photo.
-// }
 
 export default App;
