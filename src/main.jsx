@@ -8,12 +8,16 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
         navigator.serviceWorker
-            .register("./service-worker.js")
+            .register("/service-worker.js", { scope: "/" })
             .then((registration) => {
                 console.log("Service Worker registered! Scope: ", registration.scope);
             })
             .catch((err) => {
                 console.log("Service Worker registration failed: ", err);
             });
+
+        navigator.serviceWorker.ready.then(() => {
+            console.log("sw ready - >:");
+        });
     });
 }
