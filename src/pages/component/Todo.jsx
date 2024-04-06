@@ -117,6 +117,8 @@ const App = () => {
         input: "",
 
         geo: { latitude: "", longitude: "" },
+
+        tab: "all",
     });
 
     const addTodo = (todoObj) => {
@@ -137,14 +139,17 @@ const App = () => {
 
     const showAll = () => {
         state.show = state.list;
+        state.tab = "all";
     };
 
     const showIng = () => {
         state.show = state.list.filter((item) => !item.done);
+        state.tab = "ing";
     };
 
     const showDone = () => {
         state.show = state.list.filter((item) => item.done);
+        state.tab = "done";
     };
 
     const setCache = (param) => {
@@ -197,7 +202,7 @@ const App = () => {
                             className="btn btn-dark"
                             style={{ height: "40px" }}
                             onClick={(e) => {
-                                if (state.input === '') {
+                                if (state.input === "") {
                                     return;
                                 }
 
@@ -230,7 +235,9 @@ const App = () => {
                 <div className=" text-center mb-3 mt-3 ">
                     <button
                         type="button"
-                        className="btn btn-outline-dark ps-4  pe-4 me-2"
+                        className={`btn btn-outline-dark ps-4  pe-4 me-2 ${
+                            state.tab == "all" ? "active" : ""
+                        }`}
                         onClick={showAll}
                     >
                         All
@@ -238,7 +245,9 @@ const App = () => {
 
                     <button
                         type="button"
-                        className="btn btn-outline-dark ps-4  pe-4 me-2"
+                        className={`btn btn-outline-dark ps-4  pe-4 me-2 ${
+                            state.tab == "ing" ? "active" : ""
+                        }`}
                         onClick={showIng}
                     >
                         Active
@@ -246,7 +255,9 @@ const App = () => {
 
                     <button
                         type="button"
-                        className="btn btn-outline-dark ps-4  pe-4"
+                        className={`btn btn-outline-dark ps-4  pe-4 me-2 ${
+                            state.tab == "done" ? "active" : ""
+                        }`}
                         onClick={showDone}
                     >
                         Completed
@@ -285,7 +296,7 @@ const App = () => {
                                     >
                                         (map)
                                     </a>{" "}
-                                    | <a href={item.location.smsURL}>(sms)</a>
+                                    {/* | <a href={item.location.smsURL}>(sms)</a> */}
                                 </span>
                             </p>
 
