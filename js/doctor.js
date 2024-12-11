@@ -70,8 +70,8 @@ class DoctorDashboard {
       const matchDate = !date || appointment.date === date;
       const matchSearch =
         !search ||
-        appointment.name.toLowerCase().includes(search) ||
-        appointment.phone.includes(search);
+        appointment.patientName.toLowerCase().includes(search) ||
+        appointment.patientPhone.includes(search);
       return matchDepartment && matchDate && matchSearch;
     });
   }
