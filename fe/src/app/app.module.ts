@@ -21,6 +21,15 @@ import { ReaderDashboardComponent } from './pages/reader/reader-dashboard.compon
 import { AdminDashboardComponent } from './pages/admin/admin-dashboard.component';
 import { CarouselComponent } from './shared/components/carousel/carousel.component';
 import { CommonHeaderComponent } from './shared/components/common-header/common-header.component';
+import { CommonFooterComponent } from './shared/components/common-footer/common-footer.component';
+import { EContainerComponent } from './shared/components/e-container/e-container.component';
+
+import { NzCarouselModule } from 'ng-zorro-antd/carousel';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzImageModule } from 'ng-zorro-antd/image';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+
 
 import { AuthService } from './core/services/auth.service';
 import { AuthGuard } from './core/guards/auth.guard';
@@ -36,7 +45,9 @@ registerLocaleData(zh);
     ReaderDashboardComponent,
     AdminDashboardComponent,
     CarouselComponent,
-    CommonHeaderComponent
+    CommonHeaderComponent,
+    CommonFooterComponent,
+    EContainerComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +57,12 @@ registerLocaleData(zh);
     BrowserAnimationsModule,
     IconsProviderModule,
     NzLayoutModule,
-    NzMenuModule
+    NzMenuModule,
+    NzCarouselModule,
+    NzButtonModule,
+    NzGridModule,
+    NzImageModule,
+    NzRadioModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: zh_CN },

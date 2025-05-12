@@ -1,3 +1,194 @@
-<p>首页内容</p>
-<!-- 用户将在这里添加轮播图组件或 HTML -->
-<!-- <app-carousel></app-carousel> --> 
+<app-carousel height="580px"></app-carousel>
+<br />
+<br />
+<br />
+<br />
+<app-e-container>
+  <div class="title-modelbox-widget1">
+    <h3 class="section-title">
+      <div class="more">
+        <a routerLink="/tushuxinxi">更多>></a>
+      </div>
+      热门图书
+    </h3>
+    <div class="sidebar-widget-body">
+      <div nz-row>
+        <div
+          nz-col
+          *ngFor="let r of tushuxinxilist"
+          nz-col
+          nzMd="6"
+          :key="r.id"
+          style="margin-bottom: 20px"
+        >
+          <article class="single_product v-module-xiezi">
+            <figure>
+              <div
+                class="product_thumb"
+                (click)="goto('/tushuxinxi/detail?id=' + r.id)"
+              >
+                <div class="label_product"></div>
+                <img nz-image class="primary_img" [nzSrc]="r.tupian" pb="100" />
+              </div>
+              <figcaption class="product_content">
+                <h4 class="product_name">
+                  <a
+                    href="javascript:;"
+                    (click)="goto('/tushuxinxi/detail?id=' + r.id)"
+                  >
+                    {{ r.tushumingcheng }}</a
+                  >
+                </h4>
+                <div class="price_box">
+                  <span class="current_price" v-if="r.jieyuecishu"
+                    >借阅次数：{{ r.jieyuecishu }}</span
+                  >
+                </div>
+                <div class="add_to_cart">
+                  <a
+                    href="javascript:;"
+                    title="查看详情"
+                    (click)="goto('/tushuxinxi/detail?id=' + r.id)"
+                    >查看详情</a
+                  >
+                </div>
+              </figcaption>
+            </figure>
+          </article>
+        </div>
+      </div>
+    </div>
+    <!-- /.sidebar-widget-body -->
+  </div>
+</app-e-container>
+
+<app-e-container>
+  <div class="title-modelbox-widget1">
+    <h3 class="section-title">
+      <div class="more">
+        <a routerLink="/tushuxinxi">更多>></a>
+      </div>
+      推荐图书
+    </h3>
+    <div class="sidebar-widget-body">
+      <div class="floor_goods_wrap clearfix">
+        <div nz-row>
+          <div
+            nz-col
+            *ngFor="let r of tushuxinxilist1"
+            nz-col
+            nzMd="6"
+            :key="r.id"
+          >
+            <div class="floor_goods_wrap_li">
+              <div class="floor_goods_wrap_b">
+                <a
+                  href="javascript:;"
+                  (click)="goto('/tushuxinxi/detail?id=' + r.id)"
+                  class="floor_goods_img"
+                >
+                  <img nz-image [nzSrc]="r.tupian" pb="100" />
+                </a>
+                <a
+                  href="javascript:;"
+                  (click)="goto('/tushuxinxi/detail?id=' + r.id)"
+                  class="floor_goods_tit"
+                >
+                  {{ r.tushumingcheng | slice : 0 : 20 }}
+                </a>
+                <a
+                  href="javascript:;"
+                  (click)="goto('/tushuxinxi/detail?id=' + r.id)"
+                  class="floor_goods_txt"
+                >
+                  {{ r.jianjie | slice : 0 : 20 }}
+                </a>
+                <a
+                  href="javascript:;"
+                  (click)="goto('/tushuxinxi/detail?id=' + r.id)"
+                  class="floor_goods_price"
+                >
+                  借阅次数：{{ r.jieyuecishu }}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.sidebar-widget-body -->
+  </div>
+</app-e-container>
+
+<app-e-container>
+  <div class="title-modelbox-widget1">
+    <h3 class="section-title">
+      <div class="more">
+        <a routerLink="/gonggaoxinxi">更多>></a>
+      </div>
+      公告栏
+    </h3>
+    <div class="sidebar-widget-body">
+      <div class="hot-class">
+        <div class="listBoxs news-styles2">
+          <!-- 咨询容器开始 -->
+          <div class="p_news">
+            <template *ngFor="let r of gonggaoxinxilist; let i = index">
+              <div class="list" routerLink="/gonggaoxinxi/detail?id={{ r.id }}">
+                <!-- 图片显示结束 -->
+                <div class="cotentBox">
+                  <!-- 时间开始 -->
+                  <div class="listTimeBox hidden-style2">
+                    <div class="listTime">{{ r.addtime }}</div>
+                    <p class="listYear">{{ resetDate("Y", r.addtime) }}年</p>
+                    <p class="listmd">
+                      <span class="listMouth"
+                        >{{ resetDate("m", r.addtime) }}月</span
+                      >
+                      <span class="listDate"
+                        >{{ resetDate("d", r.addtime) }}日</span
+                      >
+                    </p>
+                  </div>
+                  <div class="leftTimeBox hidden-style1">
+                    <div class="listTime">{{ r.addtime }}</div>
+                    <div class="newData">{{ resetDate("d", r.addtime) }}</div>
+                    <div class="newYearMon">
+                      {{ resetDate("Y-m", r.addtime) }}
+                    </div>
+                  </div>
+                  <!-- 时间结束 -->
+                  <!-- 标题概述开始 -->
+                  <div class="listCotentBox">
+                    <!-- 标题开始 -->
+                    <div class="titleBox">
+                      <a href="javascript:;" class="titleLink">
+                        <h5 class="titleh5">{{ r.biaoti }}</h5>
+                      </a>
+                    </div>
+                    <div class="newToolBox hidden-style1">
+                      <i class="fa fa-clock-o"></i>
+                      发布时间：{{ r.addtime }}
+                    </div>
+                    <!-- 标题结束 -->
+                    <!-- 概要开始 -->
+                    <div class="gyBox">
+                      <article
+                        class="lsitSummary"
+                        v-text="$substr(r.neirong,120)"
+                      ></article>
+                    </div>
+                    <!-- 概要结束 -->
+                  </div>
+                  <!-- 标题概述结束 -->
+                </div>
+              </div>
+            </template>
+          </div>
+          <!-- 咨询容器结束 -->
+        </div>
+      </div>
+    </div>
+    <!-- /.sidebar-widget-body -->
+  </div>
+</app-e-container>

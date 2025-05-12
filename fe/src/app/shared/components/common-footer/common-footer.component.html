@@ -1,0 +1,22 @@
+<footer class="footer">
+  <div class="footer_con">
+      <div class="con">
+          <div class="nei">
+              <div class="div_nav">
+                  <div class="links">
+                      友情链接:
+                      <a *ngFor="let v of likeList" [href]="v.wangzhi" target="_blank">{{v.wangzhanmingcheng}}</a>
+                  </div>
+              </div>
+              <div class="clear"></div> <!-- 注意：clear div 是比较旧的清除浮动方式，现代布局建议用 flex/grid -->
+              <div class="lian">
+                  <p>电话：xxx-xxxxxxxx</p>
+                  <p>邮箱：xxxxxxx@xx.com</p>
+                  <p>手机：1xx xxx xxx</p>
+                  <p>地址：xxxxxxxxxxxxx</p>
+                  <p>Copyright© 2022 版权所有：智能图书馆系统</p>
+              </div>
+          </div>
+      </div>
+  </div>
+</footer>

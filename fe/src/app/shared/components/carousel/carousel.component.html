@@ -1,2 +1,7 @@
-<p>轮播图占位符</p>
-<!-- 用户将在这里实现轮播图 HTML --> 
+11516
+
+<nz-carousel [nzEffect]="effect" nzAutoPlay>
+  <div nz-carousel-content *ngFor="let index of array">
+    <h3>{{ index }}</h3>
+  </div>
+</nz-carousel>

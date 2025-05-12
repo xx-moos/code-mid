@@ -32,4 +32,10 @@ public class LoginDTO {
      */
     @NotBlank(message = "验证码ID不能为空")
     private String captchaId;
+
+    /**
+     * 角色：0-读者，1-管理员
+     */
+    @NotBlank(message = "角色不能为空")
+    private String role;
 } 

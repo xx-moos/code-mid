@@ -1,0 +1,81 @@
+// 基本与原 SCSS 相同，注意资源路径
+// 假设 fonter_bg.png 位于 src/assets/images/ 目录下
+.footer {
+  background: url('/assets/images/fonter_bg.png') no-repeat; // 修改路径
+  overflow: hidden;
+  padding-bottom: 40px;
+  background-size: cover;
+}
+.footer .footer_con {
+  max-width: 1240px;
+  width: 98%;
+  margin: 60px auto 20px;
+  background: #ffffff;
+  padding: 10px;
+}
+.footer .footer_con .con {
+  border: 1px solid #f7f5ee;
+}
+.footer .footer_con .con .nei {
+  width: 60%;
+  margin: auto;
+  padding: 60px 0px;
+}
+.footer .footer_con .con .nei .div_nav {
+  width: 100%;
+  margin-left: 150px; // 这个样式可能需要根据实际布局调整
+}
+// .footer .footer_con .con .nei .div_nav li a { // Vue 中是 <ul><li><a>...</a></li></ul> 结构，这里是直接 <a>
+//     color: #666666;
+//     margin: 0 10px;
+// }
+// .footer .footer_con .con .nei .div_nav li a:hover { // 同上
+//     color: #81a849;
+// }
+.footer .footer_con .con .nei .links {
+  position: relative;
+  color: #666666;
+}
+.footer .footer_con .con .nei .links a {
+  color: #666666;
+  margin: 0 10px;
+}
+.footer .footer_con .con .nei .links a:hover { // 添加 a:hover 样式
+  color: #81a849;
+}
+
+.footer .footer_con .con .nei .lian {
+  margin-top: 30px;
+  color: #999999;
+  font-size: 14px;
+  text-align: center;
+}
+.footer .footer_con .con .nei .lian a {
+  color: #999999;
+}
+.footer .footer_con .con .nei .lian .er_a {
+  position: relative;
+  width: 90px;
+  cursor: pointer;
+}
+.footer .footer_con .con .nei .lian .er_a .er_img {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 83px;
+  height: 83px;
+  z-index: 99999;
+  display: none;
+}
+.footer .copy { // 这个类在 HTML 中没有用到，但保留
+  color: #999999;
+  line-height: 22px;
+  text-align: center;
+}
+
+// 如果需要清除浮动，可以添加
+.clear {
+  clear: both;
+  height: 0;
+  overflow: hidden;
+}

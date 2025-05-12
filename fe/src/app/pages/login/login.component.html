@@ -1,16 +1,67 @@
-<p>登录页面</p>
-<!-- 用户将在这里创建登录表单 -->
-<!-- 例如: -->
-<!-- 
-<form #loginForm="ngForm" (ngSubmit)="loginUser(loginForm.value)">
-  <div>
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" ngModel required>
+<div class="login-index">
+  <div class="admin_login_wrap" v-loading="loading">
+    <div class="adming_login_border">
+      <h1>图书管理系统</h1>
+      <div class="admin_input">
+        <form action="javascript:;" method="post">
+          <ul class="admin_items">
+            <li>
+              <label for="user" class="admin_items_label">用户名：</label>
+              <input
+                type="text"
+                name="username"
+                [(ngModel)]="form.username"
+                id="user"
+                class="admin_input_style"
+              />
+            </li>
+            <li>
+              <label for="pwd" class="admin_items_label">密码：</label>
+              <input
+                type="password"
+                name="password"
+                [(ngModel)]="form.password"
+                id="password"
+                class="admin_input_style"
+              />
+            </li>
+            <li class="pagerandom">
+              <label for="captcha" class="admin_items_label">验证码：</label>
+              <input
+                type="text"
+                name="captcha"
+                [(ngModel)]="form.captcha"
+                id="captcha"
+                class="admin_input_style"
+              />
+              <img (click)="loadCaptch()" [src]="captchUrl" alt="刷新验证码" />
+            </li>
+            <li>
+              <label class="admin_items_label" for="role"> 权限 </label>
+              <div style="margin-left: 80px">
+                <nz-radio-group
+                  [(ngModel)]="form.role"
+                  style="width: 100%"
+                  id="role"
+                  name="role"
+                >
+                  <label nz-radio nzValue="0">用户</label>
+                  <label nz-radio nzValue="1">工作人员</label>
+                </nz-radio-group>
+              </div>
+            </li>
+            <li>
+              <input
+                type="button"
+                (click)="login()"
+                value="提交"
+                class="btn btn-primary"
+              />
+            </li>
+          </ul>
+        </form>
+        <p class="admin_copyright">&copy; Powered by {{ config.title }}</p>
+      </div>
+    </div>
   </div>
-  <div>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" ngModel required>
-  </div>
-  <button type="submit" [disabled]="!loginForm.valid">登录</button>
-</form>
---> 
+</div>

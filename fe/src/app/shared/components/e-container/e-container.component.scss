@@ -1,0 +1,89 @@
+// 这些样式将成为全局样式，因为组件的 ViewEncapsulation 将被设置为 None。
+// 考虑将针对 #app, .el-form 等的全局样式移到 src/styles.scss 中以获得更好的封装性。
+
+.e-container {
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 1100px) {
+  .e-container {
+      width: 980px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .e-container {
+      width: 1100px;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .e-container {
+      width: var(--container-width, 1200px); // CSS 变量在 Angular 中同样有效
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .e-container {
+      width: 100%;
+      padding: 0px 8px;
+      box-sizing: border-box; // 建议添加，当 width:100% 和 padding 同时存在时
+  }
+
+  // 以下样式由于 ViewEncapsulation.None 会全局生效
+  #app {
+      overflow-x: hidden;
+  }
+
+  #project-box .info {
+      float: none !important;
+  }
+
+  #project-box .entry-content {
+      float: none !important;
+      width: 100% !important;
+      padding: 10px;
+      box-sizing: border-box; // 建议添加
+  }
+
+  .el-form {
+      .el-form-item__label {
+          width: 100% !important;
+          text-align: left;
+      }
+      .el-form-item__content {
+          width: 100% !important;
+          margin-left: 0px !important;
+      }
+  }
+
+  p {
+      white-space: pre-wrap;
+  }
+
+  .Home > div > div > .el-carousel {
+      display: none;
+  }
+
+  .goods-info {
+      .gallery-list {
+          float: none !important;
+          width: 100% !important;
+          height: 350px;
+      }
+
+      .goods-right-content {
+          margin-left: 0px !important;
+      }
+  }
+
+  .hjlgf {
+      .row1 {
+          float: none !important;
+          width: auto;
+      }
+      .row2 {
+          margin-left: 0px !important;
+      }
+  }
+}
