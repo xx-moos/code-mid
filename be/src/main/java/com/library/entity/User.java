@@ -1,92 +1,63 @@
 package com.library.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.experimental.Accessors;
-
-import java.time.LocalDateTime;
+import lombok.EqualsAndHashCode;
 
 /**
- * 用户实体类
+ * 用户实体
  */
 @Data
-@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 @TableName("user")
-public class User {
-    
-    /**
-     * 用户ID
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
-    
+public class User extends BaseEntity {
     /**
      * 用户名
      */
+    @TableField("username")
     private String username;
-    
+
     /**
-     * 密码(MD5加密)
+     * 密码
      */
+    @TableField("password")
     private String password;
-    
+
+
     /**
-     * 真实姓名
+     * 邮箱
      */
-    private String realName;
-    
-    /**
-     * 电子邮箱
-     */
+    @TableField("email")
     private String email;
-    
+
     /**
      * 手机号
      */
+    @TableField("phone")
     private String phone;
-    
+
     /**
-     * 头像路径
+     * 头像
      */
+    @TableField("avatar")
     private String avatar;
-    
+
     /**
-     * 角色：0-读者，1-管理员
+     * 状态（0-禁用，1-正常）
      */
-    private Integer role;
-    
-    /**
-     * 失信值
-     */
-    private Integer creditScore;
-    
-    /**
-     * 状态：0-正常，1-禁用
-     */
+    @TableField("status")
     private Integer status;
-    
+
     /**
-     * 创建时间
+     * 角色（admin-管理员，user-普通用户）
      */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-    
+    @TableField("role")
+    private String role;
+
     /**
-     * 更新时间
+     * 失信值（0-3，达到3禁止借书）
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
-    
-    /**
-     * 是否删除：0-未删除，1-已删除
-     */
-    @TableLogic
-    private Integer deleted;
-    
-    /**
-     * 是否管理员
-     */
-    public boolean isAdmin() {
-        return role != null && role == 1;
-    }
-}
+    @TableField("credit_score")
+    private Integer creditScore;
+} 

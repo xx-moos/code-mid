@@ -5,8 +5,8 @@ import com.library.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 用户数据访问层接口
+ * 用户Mapper接口
  */
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-}
+} 

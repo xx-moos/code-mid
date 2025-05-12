@@ -1,16 +1,18 @@
 server:
   port: 8080
+  servlet:
+    context-path: /bapi
 
 spring:
   application:
     name: smart-library
-  
+
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.8.129:3306/smart_library?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: root
+    password: 123456
     hikari:
       minimum-idle: 5
       maximum-pool-size: 15
@@ -18,7 +20,7 @@ spring:
       pool-name: HikariCP
       max-lifetime: 1800000
       connection-timeout: 30000
-  
+
   # Redis配置
   redis:
     host: 192.168.8.129
@@ -43,6 +45,11 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+# 日志配置
+logging:
+  level:
+    com.library.security: DEBUG
 
 # MyBatis Plus配置
 mybatis-plus:
@@ -70,14 +77,14 @@ springfox:
 
 # JWT配置
 jwt:
-  secret: smart-library-secret-key
-  expiration: 86400000  # 24小时
+  secret: 'smart-library-secret-key'
+  expiration: 86400000 # 24小时
 
 # 项目自定义配置
 library:
   # 借阅相关配置
   borrow:
-    max-books: 5  # 最大借阅数量
-    max-days: 60  # 最大借阅天数
-    renew-days: 30  # 续借天数
-    max-credit-score: 3  # 最大失信值
+    max-books: 5 # 最大借阅数量
+    max-days: 60 # 最大借阅天数
+    renew-days: 30 # 续借天数
+    max-credit-score: 3 # 最大失信值

@@ -1,11 +1,10 @@
 package com.library.config;
 
-import com.library.security.CustomUserDetailsService;
-import com.library.security.JwtAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.library.security.JwtAuthenticationTokenFilter;
+import com.library.security.MD5PasswordEncoder;
+import com.library.security.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -15,92 +14,73 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.Collections;
+import javax.annotation.Resource;
 
 /**
- * Spring Security 配置类
+ * Spring Security配置类
  */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-    
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-    
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        // 使用自定义的MD5密码编码器
-        return new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence rawPassword) {
-                return com.library.util.MD5Util.encrypt(rawPassword.toString());
-            }
-            
-            @Override
-            public boolean matches(CharSequence rawPassword, String encodedPassword) {
-                return encodedPassword.equals(encode(rawPassword));
-            }
-        };
-    }
-    
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
-    
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-    
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-        configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
-        
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
-    
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            // 启用CORS，禁用CSRF
-            .cors().configurationSource(corsConfigurationSource())
-            .and().csrf().disable()
-            
-            // 不使用Session
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            
-            // 配置请求授权
-            .authorizeRequests()
-            // 允许登录和注册接口匿名访问
-            .antMatchers("/api/auth/**").permitAll()
-            // 允许swagger相关资源匿名访问
-            .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/v2/api-docs/**", "/webjars/**").permitAll()
-            // 允许静态资源匿名访问
-            .antMatchers(HttpMethod.GET, "/", "/upload/**").permitAll()
-            // 其他所有请求都需要认证
-            .anyRequest().authenticated();
-        
-        // 添加JWT过滤器
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-    }
+
+  @Resource
+  private UserDetailsServiceImpl userDetailsService;
+
+  @Resource
+  private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+
+  /**
+   * 认证管理器
+   */
+  @Bean
+  @Override
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManagerBean();
+  }
+
+  /**
+   * 密码编码器
+   */
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    // 使用自定义密码编码器，同时兼容MD5和BCrypt等多种编码方式
+    return new MD5PasswordEncoder();
+  }
+
+  /**
+   * 身份认证配置
+   */
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+  }
+
+  /**
+   * Http安全配置
+   */
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http
+        // 关闭CSRF
+        .csrf().disable()
+        // 不通过Session获取SecurityContext
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        // 允许匿名访问的接口
+        .authorizeRequests()
+        // 登录、注册、验证码等接口允许匿名访问
+        .antMatchers("/auth/**").permitAll()
+        // Swagger相关接口允许匿名访问
+        .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/webjars/**")
+        .permitAll()
+        // 静态资源允许匿名访问
+        .antMatchers("/upload/**").permitAll()
+        // 其他所有请求需要身份认证
+        .anyRequest().authenticated();
+
+    // 添加JWT认证过滤器
+    http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+  }
 }
