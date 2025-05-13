@@ -1,0 +1,92 @@
+<div class="views-gongzuorenyuan-list">
+  <div>
+    <nz-card class="box-card" [nzTitle]="'图书类别查询'">
+      <div class="">
+        <nz-space nzAlign="center">
+          <span *nzSpaceItem>分类名称</span>
+          <input *nzSpaceItem nz-input [(ngModel)]="search.username" />
+          <span *nzSpaceItem>图书名称</span>
+          <input *nzSpaceItem nz-input [(ngModel)]="search.bookName" />
+
+          <span *nzSpaceItem>借阅状态</span>
+          <nz-select
+            *nzSpaceItem
+            nz-select
+            [(ngModel)]="search.status"
+            style="width: 140px"
+          >
+            <nz-option
+              *ngFor="let item of statusList"
+              [nzValue]="item.value"
+              [nzLabel]="item.label"
+            >
+            </nz-option>
+            <!-- <nz-option nzValue="1" nzLabel="借阅中"></nz-option>
+            <nz-option nzValue="2" nzLabel="已归还"></nz-option>
+            <nz-option nzValue="3" nzLabel="逾期未还"></nz-option> -->
+          </nz-select>
+
+          <button
+            *nzSpaceItem
+            nz-button
+            nz-type="primary"
+            icon="el-icon-search"
+            (click)="searchSubmit()"
+          >
+            查询
+          </button>
+        </nz-space>
+      </div>
+      <br />
+      <div>
+        <button nz-button nzType="primary" (click)="addItem()">新增</button>
+      </div>
+      <br />
+      <nz-table #basicTable [nzShowPagination]="false" [nzData]="lists">
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>用户名</th>
+            <th>图书名称</th>
+            <th>借阅状态</th>
+            <th>借阅时间</th>
+            <th>归还时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data">
+            <td>{{ data?.id }}</td>
+            <td>{{ data?.username }}</td>
+            <td>{{ data?.bookName }}</td>
+            <td>{{ getStatusName(data?.status) }}</td>
+            <td>{{ data?.borrowTime }}</td>
+            <td>{{ data?.returnTime }}</td>
+            <td>
+              <nz-space>
+                <a
+                  *nzSpaceItem
+                  nz-popconfirm
+                  nzPopconfirmTitle="审核借阅"
+                  nzPopconfirmPlacement="bottom"
+                  (nzOnConfirm)="auditItem(data)"
+                  >审核</a
+                >
+              </nz-space>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+
+      <div class="e-pages" style="margin-top: 10px; text-align: center">
+        <nz-pagination
+          [nzPageIndex]="search.current"
+          [nzPageSize]="search.size"
+          (nzPageIndexChange)="sizeChange($event)"
+          [nzTotal]="totalCount"
+        >
+        </nz-pagination>
+      </div>
+    </nz-card>
+  </div>
+</div>

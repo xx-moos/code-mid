@@ -11,7 +11,7 @@
  Target Server Version : 90300
  File Encoding         : 65001
 
- Date: 13/05/2025 21:58:55
+ Date: 13/05/2025 22:53:08
 */
 
 SET NAMES utf8mb4;
@@ -34,10 +34,6 @@ CREATE TABLE `announcement`  (
   INDEX `idx_publisher_id`(`publisher_id` ASC) USING BTREE,
   INDEX `idx_status`(`status` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书馆公告表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of announcement
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for book
@@ -68,12 +64,6 @@ CREATE TABLE `book`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of book
--- ----------------------------
-INSERT INTO `book` VALUES (1, '1231', '12314', '123', '002', '2025-05-11', '123123', NULL, NULL, '/bapi/upload/fbbfd769-680f-4e38-bebe-b7fdebcbd858.png', 344, 0, 0.0, 0, '2025-05-13 19:28:00', '2025-05-13 19:33:03', 0);
-INSERT INTO `book` VALUES (2, '1231', '12314', '123', '002', '2025-05-11', '123123', NULL, 'hahsahdwbidbnaiwndfsivifdndfueifnesiufnseiufhsiufnsidhfnseuifheisufhsienwkjnriwneiufnisdufhis777', '/bapi/upload/d7321cca-48e9-455d-ac55-9bb4cf4d1968.png', 344, 0, 0.0, 0, '2025-05-13 19:30:55', '2025-05-13 19:36:10', 0);
-
--- ----------------------------
 -- Table structure for book_category
 -- ----------------------------
 DROP TABLE IF EXISTS `book_category`;
@@ -93,15 +83,6 @@ CREATE TABLE `book_category`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书分类表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of book_category
--- ----------------------------
-INSERT INTO `book_category` VALUES (1, 'ceshi4545', '001', NULL, 1, 0, '2025-05-13 18:53:58', '2025-05-13 19:39:06', 0);
-INSERT INTO `book_category` VALUES (2, 'ceshi2566546', '002', NULL, 1, 0, '2025-05-13 18:54:13', '2025-05-13 19:39:19', 0);
-INSERT INTO `book_category` VALUES (3, 'ceshi3', '003', 2, 2, 0, '2025-05-13 18:59:10', '2025-05-13 11:01:33', 1);
-INSERT INTO `book_category` VALUES (5, 'ceshi4', '004', 2, 2, 0, '2025-05-13 19:03:38', '2025-05-13 19:03:38', 0);
-INSERT INTO `book_category` VALUES (6, 'ceshi5', '005', NULL, 1, 0, '2025-05-13 19:05:12', '2025-05-13 19:05:12', 0);
-
--- ----------------------------
 -- Table structure for book_collection
 -- ----------------------------
 DROP TABLE IF EXISTS `book_collection`;
@@ -114,10 +95,6 @@ CREATE TABLE `book_collection`  (
   UNIQUE INDEX `uk_user_book`(`user_id` ASC, `book_id` ASC) USING BTREE,
   INDEX `idx_book_id`(`book_id` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书收藏表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of book_collection
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for book_comment
@@ -133,15 +110,12 @@ CREATE TABLE `book_comment`  (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除：0-未删除，1-已删除',
+  `status` tinyint NOT NULL COMMENT '状态：0-待审核, 1-审核通过，2-审核拒绝',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_user_id`(`user_id` ASC) USING BTREE,
   INDEX `idx_book_id`(`book_id` ASC) USING BTREE,
   INDEX `idx_parent_id`(`parent_id` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书评论表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of book_comment
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for borrow_record
@@ -168,10 +142,6 @@ CREATE TABLE `borrow_record`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '借阅记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of borrow_record
--- ----------------------------
-
--- ----------------------------
 -- Table structure for comment_like
 -- ----------------------------
 DROP TABLE IF EXISTS `comment_like`;
@@ -184,10 +154,6 @@ CREATE TABLE `comment_like`  (
   UNIQUE INDEX `uk_user_comment`(`user_id` ASC, `comment_id` ASC) USING BTREE,
   INDEX `idx_comment_id`(`comment_id` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '评论点赞表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of comment_like
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for user
@@ -211,14 +177,5 @@ CREATE TABLE `user`  (
   UNIQUE INDEX `uk_username`(`username` ASC) USING BTREE,
   INDEX `idx_role_status`(`role` ASC, `status` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of user
--- ----------------------------
-INSERT INTO `user` VALUES (1, 'admin', 'e10adc3949ba59abbe56e057f20f883e', '系统管理员', NULL, NULL, NULL, 1, 0, 0, '2025-05-12 08:51:55', '2025-05-12 10:21:58', 0);
-INSERT INTO `user` VALUES (6, '003', 'c6f057b86584942e415435ffb1fa93d4', 'aaa', NULL, NULL, '/bapi/upload/6c220cf7-587f-4771-9f98-d2a2317a23d2.png', 0, 0, 0, '2025-05-13 15:27:15', '2025-05-13 15:27:15', 0);
-INSERT INTO `user` VALUES (7, '001', 'c6f057b86584942e415435ffb1fa93d4', 'aaw', NULL, NULL, NULL, 0, 0, 0, '2025-05-13 15:28:28', '2025-05-13 17:11:57', 1);
-INSERT INTO `user` VALUES (8, '002', 'c6f057b86584942e415435ffb1fa93d4', 'aa', NULL, NULL, NULL, 0, 0, 0, '2025-05-13 15:29:54', '2025-05-13 17:59:58', 1);
-INSERT INTO `user` VALUES (9, 'r001', 'c6f057b86584942e415435ffb1fa93d4', 'aaa', NULL, NULL, '/bapi/upload/2b244163-e7bb-411d-bf21-1160b1439b5c.png', 1, 0, 0, '2025-05-13 17:51:45', '2025-05-13 17:51:45', 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

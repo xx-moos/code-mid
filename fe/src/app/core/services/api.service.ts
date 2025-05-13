@@ -126,7 +126,7 @@ export class ApiService {
 
   put<T>(
     endpoint: string,
-    body: any | null,
+    body?: any | null,
     options?: {
       params?: HttpParams | { [param: string]: string | string[] };
       headers?: HttpHeaders | { [header: string]: string | string[] };

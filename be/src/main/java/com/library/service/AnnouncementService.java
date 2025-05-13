@@ -50,10 +50,9 @@ public interface AnnouncementService {
     /**
      * 获取公告列表（分页，管理员视角，可包含筛选条件）
      * @param queryDTO 分页参数
-     * // @param filterDTO 筛选参数 (如果需要，则添加 AdminAnnouncementFilterDTO)
      * @return 分页后的公告列表（管理员视图）
      */
-    PageVO<AnnouncementAdminVO> getAdminAnnouncements(PageQueryDTO queryDTO /*, AdminAnnouncementFilterDTO filterDTO*/);
+    PageVO<AnnouncementAdminVO> getAdminAnnouncements(PageQueryDTO queryDTO );
 
     /**
      * 根据ID获取公告详情（管理员视角）

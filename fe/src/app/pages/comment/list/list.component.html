@@ -1,0 +1,54 @@
+<div class="views-tushuxinxi-list">
+  <div>
+    <app-e-container>
+      <div class="title-modelbox-widget1">
+        <h3 class="section-title">公告信息列表</h3>
+        <div class="sidebar-widget-body">
+          <div class="form-search">
+            <form
+              nz-form
+              [formGroup]="validateForm"
+              [nzLayout]="'inline'"
+              size="small"
+            >
+              <nz-form-item>
+                <nz-form-label [nzMd]="8" [nzXs]="24" nzRequired nzFor="title"
+                  >标题</nz-form-label
+                >
+                <nz-form-control [nzMd]="16" [nzXs]="24" [nzSm]="16">
+                  <input nz-input formControlName="title" id="title" />
+                </nz-form-control>
+              </nz-form-item>
+
+              <nz-form-item>
+                <button
+                  nz-button
+                  type="primary"
+                  (click)="searchSubmit()"
+                  icon="el-icon-search"
+                >
+                  查询
+                </button>
+              </nz-form-item>
+            </form>
+          </div>
+
+          <div nz-col [nzSpan]="20">table</div>
+
+          <div class="e-pages" style="margin-top: 10px; text-align: center">
+            <nz-pagination
+              [nzPageIndex]="search.current"
+              [nzPageSize]="search.size"
+              (nzPageIndexChange)="loadList(1)"
+              (nzPageSizeChange)="sizeChange($event)"
+              nzShowSizeChanger
+              nzShowQuickJumper
+              [nzTotal]="totalCount"
+            >
+            </nz-pagination>
+          </div>
+        </div>
+      </div>
+    </app-e-container>
+  </div>
+</div>

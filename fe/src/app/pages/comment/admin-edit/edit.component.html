@@ -1,0 +1,38 @@
+<div class="views-yonghu-web-add">
+  <div>
+    <!-- [nzTitle]="id ? '图书类别编辑' : '图书类别新增'" -->
+    <nz-card class="box-card">
+      <form
+        nz-form
+        [formGroup]="validateForm"
+        nzLabelCol="140px"
+        status-icon
+        validate-on-rule-change
+        (ngSubmit)="submit()"
+      >
+        <nz-form-item>
+          <nz-form-label nzRequired>标题</nz-form-label>
+          <nz-form-control nzErrorTip="请填写标题">
+            <input nz-input formControlName="title" placeholder="输入标题" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzRequired>内容</nz-form-label>
+          <nz-form-control nzErrorTip="请填写内容">
+            <textarea
+              nz-input
+              formControlName="content"
+              placeholder="输入内容"
+              rows="10"
+            ></textarea>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <button nz-button nzType="primary">提交</button>
+        </nz-form-item>
+      </form>
+    </nz-card>
+  </div>
+</div>

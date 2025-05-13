@@ -165,10 +165,10 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowRecordMapper, BorrowRec
         }
         if (StringUtils.isNotBlank(bookName)) {
             // TODO: 根据书名模糊查询图书ID，然后加入查询条件
-            // List<Book> books = bookService.list(new LambdaQueryWrapper<Book>().like(Book::getName, bookName));
-            // if (!books.isEmpty()) {
-            // queryWrapper.in(BorrowRecord::getBookId, books.stream().map(Book::getId).collect(Collectors.toList()));
-            // }
+            List<Book> books = bookService.list(new LambdaQueryWrapper<Book>().like(Book::getName, bookName));
+            if (!books.isEmpty()) {
+                queryWrapper.in(BorrowRecord::getBookId, books.stream().map(Book::getId).collect(Collectors.toList()));
+            }
         }
         queryWrapper.eq(status != null, BorrowRecord::getStatus, status);
         queryWrapper.orderByDesc(BorrowRecord::getBorrowDate);
@@ -215,14 +215,34 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowRecordMapper, BorrowRec
 
         // 设置状态描述和是否逾期
         switch (record.getStatus()) {
-            case 0: vo.setStatusDesc("借阅中"); break;
-            case 1: vo.setStatusDesc("已归还"); break;
-            case 2: vo.setStatusDesc("逾期未还"); break;
-            case 3: vo.setStatusDesc("丢失"); break;
-            default: vo.setStatusDesc("未知状态");
+            case 0:
+                vo.setStatusDesc("借阅中");
+                break;
+            case 1:
+                vo.setStatusDesc("已归还");
+                break;
+            case 2:
+                vo.setStatusDesc("逾期未还");
+                break;
+            case 3:
+                vo.setStatusDesc("丢失");
+                break;
+            default:
+                vo.setStatusDesc("未知状态");
         }
         vo.setIsOverdue(record.getStatus() == 0 && record.getReturnDate().isBefore(LocalDateTime.now()));
 
         return vo;
+    }
+
+
+    @Override
+    public boolean audit(Long id) {
+        BorrowRecord borrowRecord = getById(id);
+        if (borrowRecord == null) {
+            throw new CustomException("借阅记录不存在");
+        }
+        borrowRecord.setStatus(1);
+        return updateById(borrowRecord);
     }
 } 

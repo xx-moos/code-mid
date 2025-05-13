@@ -10,10 +10,13 @@ import { AdminDashboardComponent } from './pages/admin/admin-dashboard.component
 import { AuthGuard } from './core/guards/auth.guard';
 import { ListComponent } from './pages/book/list/list.component';
 import { NoteListComponent } from './pages/note/list/list.component';
+import { NoteAdminListComponent } from './pages/note/admin-list/list.component';
 import { UserEditComponent } from './pages/user/edit/edit.component';
 import { UserListComponent } from './pages/user/list/list.component';
 import { BookEditComponent } from './pages/book/admin-edit/edit.component';
 import { BookListComponent } from './pages/book/admin-list/list.component';
+import { BorrowListComponent } from './pages/borrow/list/list.component';
+import { CommentAdminListComponent } from './pages/comment/admin-list/list.component';
 
 import { CategoryListComponent } from './pages/category/list/list.component';
 
@@ -62,6 +65,11 @@ const routes: Routes = [
       { path: 'book-edit', component: BookEditComponent },
 
       { path: 'category-list', component: CategoryListComponent },
+      { path: 'borrow-list', component: BorrowListComponent },
+
+      { path: 'note-list', component: NoteAdminListComponent },
+
+      { path: 'comment-list', component: CommentAdminListComponent },
     ],
   },
 

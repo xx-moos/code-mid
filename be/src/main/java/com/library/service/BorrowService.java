@@ -62,4 +62,12 @@ public interface BorrowService extends IService<BorrowRecord> {
      * @return 借阅记录详情
      */
     BorrowRecordVO getBorrowDetail(Long recordId);
+
+    /**
+     * 审核借阅申请
+     *
+     * @param id 借阅记录ID
+     * @return 是否成功
+     */
+    boolean audit(Long id);
 } 

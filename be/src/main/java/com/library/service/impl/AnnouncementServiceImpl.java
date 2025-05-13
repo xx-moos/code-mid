@@ -11,14 +11,12 @@ import com.library.service.AnnouncementService;
 import com.library.vo.AnnouncementAdminVO;
 import com.library.vo.AnnouncementPublicVO;
 import com.library.vo.PageVO;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -112,8 +110,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         Page<Announcement> page = new Page<>(queryDTO.getPage(), queryDTO.getSize());
         // 管理员查看所有未逻辑删除的公告，可以按更新时间倒序
         QueryWrapper<Announcement> queryWrapper = new QueryWrapper<Announcement>()
-                // .eq("deleted", 0) // @TableLogic 会自动处理
-                .orderByDesc("update_time"); 
+                .orderByDesc("update_time");
+
+        if (queryDTO.getTitle() != null) {
+            queryWrapper.like("title", queryDTO.getTitle());
+        }
 
         Page<Announcement> announcementPage = announcementMapper.selectPage(page, queryWrapper);
 
@@ -131,7 +132,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         Announcement announcement = announcementMapper.selectById(id);
         // 管理员可以查看未删除的任何公告
         if (announcement == null || announcement.getDeleted() == 1) {
-             throw new RuntimeException("公告不存在");
+            throw new RuntimeException("公告不存在");
         }
         AnnouncementAdminVO vo = new AnnouncementAdminVO();
         BeanUtils.copyProperties(announcement, vo);
