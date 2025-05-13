@@ -25,7 +25,7 @@ import { CommonFooterComponent } from './shared/components/common-footer/common-
 import { EContainerComponent } from './shared/components/e-container/e-container.component';
 import { ListComponent } from './pages/book/list/list.component';
 import { NoteListComponent } from './pages/note/list/list.component';
-
+import { UserEditComponent } from './pages/user/edit/edit.component';
 
 
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
@@ -40,6 +40,8 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 import { AuthService } from './core/services/auth.service';
 import { AuthGuard } from './core/guards/auth.guard';
@@ -61,7 +63,8 @@ registerLocaleData(zh);
     CommonFooterComponent,
     EContainerComponent,
     ListComponent,
-    NoteListComponent
+    NoteListComponent,
+    UserEditComponent
   ],
   imports: [
     ReactiveFormsModule,
@@ -84,7 +87,9 @@ registerLocaleData(zh);
     NzTableModule,
     NzPaginationModule,
     NzInputModule,
-    NzTreeModule
+    NzTreeModule,
+    NzUploadModule,
+    NzSelectModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: zh_CN },

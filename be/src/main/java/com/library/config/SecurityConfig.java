@@ -100,12 +100,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/auth/**").permitAll()
         .antMatchers("/categories/**").permitAll()
         .antMatchers(HttpMethod.GET, "/book/**").permitAll()
+
+        // 公告公开接口允许匿名访问
+        .antMatchers("/api/public/announcements/**").permitAll()
+
         // Swagger相关接口允许匿名访问
         .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/webjars/**")
         .permitAll()
         // 静态资源允许匿名访问
         .antMatchers("/upload/**").permitAll()
-        // 其他所有请求需要身份认证
+        // 其他所有请求需要身份认证 (包括 /api/admin/announcements/**)
         .anyRequest().authenticated();
 
     // 添加JWT认证过滤器

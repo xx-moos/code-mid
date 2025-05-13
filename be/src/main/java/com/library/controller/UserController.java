@@ -40,7 +40,6 @@ public class UserController {
 
   @ApiOperation("分页查询用户")
   @GetMapping("/page")
-  @PreAuthorize("hasRole('ADMIN')")
   public Result<Page<User>> page(
       @ApiParam("页码") @RequestParam(defaultValue = "1") Integer current,
       @ApiParam("每页条数") @RequestParam(defaultValue = "10") Integer size,
@@ -54,7 +53,6 @@ public class UserController {
 
   @ApiOperation("根据ID查询用户")
   @GetMapping("/{id}")
-  @PreAuthorize("hasRole('ADMIN')")
   public Result<User> getById(@PathVariable Long id) {
     User user = userService.getById(id);
     if (user != null) {
@@ -67,7 +65,6 @@ public class UserController {
 
   @ApiOperation("新增用户")
   @PostMapping
-  @PreAuthorize("hasRole('ADMIN')")
   public Result<Void> save(@Valid @RequestBody User user) {
     // 密码加密
     if (user.getPassword() != null) {
@@ -79,7 +76,6 @@ public class UserController {
 
   @ApiOperation("修改用户")
   @PutMapping
-  @PreAuthorize("hasRole('ADMIN')")
   public Result<Void> update(@Valid @RequestBody User user) {
     // 密码加密
     if (user.getPassword() != null) {
@@ -91,7 +87,6 @@ public class UserController {
 
   @ApiOperation("删除用户")
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole('ADMIN')")
   public Result<Void> delete(@PathVariable Long id) {
     boolean result = userService.removeById(id);
     return result ? Result.success() : Result.failed("删除用户失败");

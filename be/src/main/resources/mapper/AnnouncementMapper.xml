@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.mapper.AnnouncementMapper">
+
+    <resultMap id="BaseResultMap" type="com.library.entity.Announcement">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="publisher_id" property="publisherId" />
+        <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, title, content, publisher_id, status, create_time, update_time, deleted
+    </sql>
+
+    <select id="findPublishedAnnouncements" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM announcement
+        WHERE status = 0 AND deleted = 0
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countPublishedAnnouncements" resultType="long">
+        SELECT COUNT(*)
+        FROM announcement
+        WHERE status = 0 AND deleted = 0
+    </select>
+
+    <select id="findPublishedById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM announcement
+        WHERE id = #{id} AND status = 0 AND deleted = 0
+    </select>
+
+    <!-- 
+        对于管理员的查询，通常可以直接使用 MyBatis-Plus 提供的 Wrapper 
+        例如: service 层调用 this.list(new QueryWrapper<Announcement>().eq("deleted", 0).orderByDesc("create_time"));
+        如果确实需要非常定制化的SQL，再在这里添加。
+        基本的增删改查，BaseMapper 已经提供了: 
+        insert(), deleteById(), updateById(), selectById(), selectList() 等。
+        逻辑删除由 @TableLogic 注解处理，调用 deleteById() 或 delete(Wrapper) 时会自动变为更新 deleted 字段。
+    -->
+
+</mapper> 

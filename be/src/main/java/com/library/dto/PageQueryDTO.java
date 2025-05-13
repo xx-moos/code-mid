@@ -1,0 +1,18 @@
+package com.library.dto;
+
+import lombok.Data;
+import javax.validation.constraints.Min;
+
+@Data
+public class PageQueryDTO {
+
+    @Min(value = 1, message = "页码必须大于0")
+    private int page = 1;
+
+    @Min(value = 1, message = "每页数量必须大于0")
+    private int size = 10;
+
+    // 可根据需要添加通用排序字段等
+    // private String sortBy;
+    // private String sortOrder; // asc, desc
+} 

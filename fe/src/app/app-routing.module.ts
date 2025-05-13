@@ -9,7 +9,8 @@ import { ReaderDashboardComponent } from './pages/reader/reader-dashboard.compon
 import { AdminDashboardComponent } from './pages/admin/admin-dashboard.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { ListComponent } from './pages/book/list/list.component';
-import { NoteListComponent } from './pages/note/list/list.component';
+import { NoteListComponent } from './pages/note/list/list.component'; 
+import { UserEditComponent } from './pages/user/edit/edit.component';
 
 const routes: Routes = [
   // 公共路由: 登录页
@@ -24,6 +25,7 @@ const routes: Routes = [
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'book-list', component: ListComponent },
       { path: 'note-list', component: NoteListComponent },
+      { path: 'user-edit', component: UserEditComponent },
       // 读者区域路由 (需要登录)
       {
         path: 'reader',

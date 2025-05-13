@@ -1,0 +1,109 @@
+<div class="views-yonghu-web-add">
+  <div>
+    <app-e-container>
+      <nz-card class="box-card" nzTitle="读者用户注册">
+        <!-- <template #header>
+          <div class="clearfix">
+            <span class="title"> 读者用户注册 </span>
+          </div>
+        </template> -->
+
+        <form
+          nz-form
+          [formGroup]="validateForm"
+          nzLabelCol="140px"
+          status-icon
+          validate-on-rule-change
+          (ngSubmit)="submit()"
+        >
+          <nz-form-item>
+            <nz-form-label nzRequired>用户名</nz-form-label>
+            <nz-form-control nzErrorTip="请填写用户名">
+              <input
+                nz-input
+                formControlName="username"
+                placeholder="输入用户名"
+              />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item
+            prop="mima"
+            required
+            :rules="[{required:true, message:'请填写密码'}]"
+          >
+            <nz-form-label nzRequired>密码</nz-form-label>
+            <nz-form-control nzErrorTip="请填写密码">
+              <input
+                nz-input
+                formControlName="password"
+                type="password"
+                placeholder="输入密码"
+              />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label nzRequired>姓名</nz-form-label>
+            <nz-form-control nzErrorTip="请填写姓名">
+              <input
+                nz-input
+                formControlName="realName"
+                type="text"
+                placeholder="输入姓名"
+              />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label>手机</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                formControlName="phone"
+                type="text"
+                placeholder="输入手机"
+              />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label>邮箱</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                formControlName="email"
+                type="text"
+                placeholder="输入邮箱"
+              />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label>头像</nz-form-label>
+            <nz-form-control>
+              <nz-upload
+                nzAction="http://localhost:8080/bapi/file/upload"
+                [nzHeaders]="{ authorization: 'Bearer ' + this.token }"
+                (nzChange)="handleChange($event)"
+              >
+                <button
+                  nz-button
+                  nzType="primary"
+                  (click)="setDefaultAvatar($event)"
+                >
+                  <span nz-icon nzType="upload"></span>
+                  上传头像
+                </button>
+              </nz-upload>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <button nz-button nzType="primary">提交</button>
+          </nz-form-item>
+        </form>
+      </nz-card>
+    </app-e-container>
+  </div>
+</div>

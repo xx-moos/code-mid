@@ -38,6 +38,12 @@ public class User extends BaseEntity {
     private String phone;
 
     /**
+     * 真实姓名
+     */
+    @TableField("real_name")
+    private String realName;
+
+    /**
      * 头像
      */
     @TableField("avatar")

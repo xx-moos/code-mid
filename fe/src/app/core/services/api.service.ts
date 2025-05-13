@@ -42,8 +42,7 @@ export class ApiService {
       responseType?: 'json';
     }
   ): Observable<T> {
-    // const url = `${this.baseUrl}/${endpoint}`; // 启用 baseUrl 时的写法
-    const url = `${this.baseUrl}${endpoint}`; // 暂时不使用 baseUrl
+    const url = `${this.baseUrl}${endpoint}`; 
     const token = localStorage.getItem('token');
 
     const feature = {
@@ -82,8 +81,7 @@ export class ApiService {
       responseType?: 'json';
     }
   ): Observable<T> {
-    // const url = `${this.baseUrl}/${endpoint}`; // 启用 baseUrl 时的写法
-    const url = `${this.baseUrl}${endpoint}`; // 暂时不使用 baseUrl
+    const url = `${this.baseUrl}${endpoint}`;
     const token = localStorage.getItem('token');
 
     const feature = {

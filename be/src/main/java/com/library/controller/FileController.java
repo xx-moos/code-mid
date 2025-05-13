@@ -48,7 +48,7 @@ public class FileController {
             file.transferTo(dest);
             log.info("文件上传成功: {}", dest.getAbsolutePath());
             // 返回文件访问路径
-            String fileUrl = "/" + Constants.UPLOAD_PATH + newFilename;
+            String fileUrl = "/bapi/" + Constants.UPLOAD_PATH + newFilename;
             return Result.success(fileUrl);
         } catch (IOException e) {
             log.error("文件上传失败", e);
