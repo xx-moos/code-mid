@@ -64,16 +64,11 @@ export class LoginComponent implements OnInit {
           );
           localStorage.setItem('token', response.data?.token || '');
 
-          // // 根据角色导航
-          // const role = this.authService.getUserRole();
-          // let navigateTo = this.returnUrl;
-          // // 如果返回 URL 是登录页或未定义，则根据角色决定去向
-          // if (navigateTo === '/' || navigateTo === '/login') {
-          //   navigateTo =
-          //     role === 'admin' ? '/admin/dashboard' : '/reader/dashboard'; // 假设读者默认页
-          // }
-          // console.log(`Navigating to: ${navigateTo}`);
-          // this.router.navigateByUrl(navigateTo);
+          if (response.data?.user?.role == 1) {
+            this.router.navigateByUrl('/admin/user-list?type=admin');
+          } else {
+            this.router.navigateByUrl('/reader/dashboard');
+          }
         },
         error: (error) => {
           console.error('Login failed:', error);

@@ -4,13 +4,14 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router } from '@angular/router';
+import { CategoryEditComponent } from '../edit/edit.component';
 
 @Component({
-  selector: 'app-list',
+  selector: 'app-category-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
 })
-export class UserListComponent implements OnInit {
+export class CategoryListComponent implements OnInit {
   validateForm!: UntypedFormGroup;
 
   loading = false;
@@ -18,7 +19,7 @@ export class UserListComponent implements OnInit {
   search = {
     current: 1,
     size: 10,
-    username: '',
+    name: '',
   };
 
   lists: any = [];
@@ -47,7 +48,7 @@ export class UserListComponent implements OnInit {
     this.loading = true;
     this.search.current = page;
 
-    this.apiService.get('/user/page', { params: this.search }).subscribe(
+    this.apiService.get('/categories/page', { params: this.search }).subscribe(
       (res: any) => {
         this.loading = false;
         console.log(`res ->:`, res);
@@ -71,7 +72,7 @@ export class UserListComponent implements OnInit {
     this.loadList(size);
   };
 
-  deleteUser = (ids: any) => {
+  deleteItem = (ids: any) => {
     console.log(`ids ->:`, ids);
     this.apiService.delete('/user/' + ids).subscribe(
       (res: any) => {
@@ -84,19 +85,30 @@ export class UserListComponent implements OnInit {
     );
   };
 
-  addUser = () => {
-    this.router.navigate(['/admin/user-edit'], {
-      queryParams: {
-        type: 'admin',
-      },
+  addItem = () => {
+    this.modal.create({
+      nzTitle: '新增图书类别',
+      nzContent: CategoryEditComponent,
+      nzOkText: '提交',
+      nzCancelText: '取消',
     });
+
+
+
+    // this.router.navigate(['/admin/book-edit'], {
+    //   queryParams: {
+    //     type: 'admin',
+    //   },
+    // });
+
+
   };
 
-  editUser = (user: any) => {
-    this.router.navigate(['/admin/user-edit'], {
+  editItem = (book: any) => {
+    this.router.navigate(['/admin/book-edit'], {
       queryParams: {
         type: 'admin',
-        id: user.id,
+        id: book.id,
       },
     });
   };

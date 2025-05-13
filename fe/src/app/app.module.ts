@@ -26,6 +26,11 @@ import { EContainerComponent } from './shared/components/e-container/e-container
 import { ListComponent } from './pages/book/list/list.component';
 import { NoteListComponent } from './pages/note/list/list.component';
 import { UserEditComponent } from './pages/user/edit/edit.component';
+import { BookListComponent } from './pages/book/admin-list/list.component';
+import { BookEditComponent } from './pages/book/admin-edit/edit.component';
+import { UserListComponent } from './pages/user/list/list.component';
+import { CategoryListComponent } from './pages/category/list/list.component';
+import { CategoryEditComponent } from './pages/category/edit/edit.component';
 
 
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
@@ -42,12 +47,14 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 
 import { AuthService } from './core/services/auth.service';
 import { AuthGuard } from './core/guards/auth.guard';
 import { ReactiveFormsModule } from '@angular/forms';
-
-
 registerLocaleData(zh);
 
 @NgModule({
@@ -64,7 +71,15 @@ registerLocaleData(zh);
     EContainerComponent,
     ListComponent,
     NoteListComponent,
-    UserEditComponent
+
+    UserListComponent,
+    UserEditComponent,
+
+    BookListComponent,
+    BookEditComponent,
+
+    CategoryListComponent,
+    CategoryEditComponent,
   ],
   imports: [
     ReactiveFormsModule,
@@ -89,13 +104,13 @@ registerLocaleData(zh);
     NzInputModule,
     NzTreeModule,
     NzUploadModule,
-    NzSelectModule
+    NzSelectModule,
+    NzSpaceModule,
+    NzModalModule,
+    NzPopconfirmModule,
+    NzDatePickerModule,
   ],
-  providers: [
-    { provide: NZ_I18N, useValue: zh_CN },
-    AuthService,
-    AuthGuard
-  ],
-  bootstrap: [AppComponent]
+  providers: [{ provide: NZ_I18N, useValue: zh_CN }, AuthService, AuthGuard],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

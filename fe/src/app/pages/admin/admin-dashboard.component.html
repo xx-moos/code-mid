@@ -1,2 +1,69 @@
-<p>管理员仪表盘</p>
-<!-- 用户将在这里添加具体内容 --> 
+<nz-layout class="app-layout">
+  <nz-sider
+    class="menu-sidebar"
+    nzCollapsible
+    nzWidth="256px"
+    nzBreakpoint="md"
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null"
+  >
+    <div class="sidebar-logo">
+      <a href="https://ng.ant.design/" target="_blank">
+        <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo" />
+        <h1>admin</h1>
+      </a>
+    </div>
+    <ul
+      nz-menu
+      nzTheme="dark"
+      nzMode="inline"
+      [nzInlineCollapsed]="isCollapsed"
+    >
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/user-list">用户管理</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/book-list">图书管理</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/category-list">图书类别管理</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/book-borrow-list">图书借阅管理</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/book-borrow-renew-list">图书续借管理</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/book-borrow-return-list">借阅归还管理</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/notice-list">公告信息管理</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/comment-list">评论管理</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/notice-list">可视化统计</a>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <span
+            class="trigger"
+            nz-icon
+            [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+          ></span>
+        </span>
+      </div>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

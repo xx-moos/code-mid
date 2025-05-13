@@ -20,6 +20,7 @@ public class Constants {
     public static final String TOKEN_PREFIX = "library:token:";
     public static final String USER_PREFIX = "library:user:";
     public static final String CAPTCHA_PREFIX = "library:captcha:";
+    public static final String BOOK_CATEGORY_PREFIX = "library:bookCategory:";
     public static final Long TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60L; // 7天
     public static final Long CAPTCHA_EXPIRE_TIME = 5 * 60L; // 5分钟
 

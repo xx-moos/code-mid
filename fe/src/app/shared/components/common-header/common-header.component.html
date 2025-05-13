@@ -30,59 +30,43 @@
             <i class="fa fa-close"></i>
           </div>
           <ul class="navigation">
-            <li [ngClass]="{ 'active-menu': isFullPathActive('/index') }">
-              <a routerLink="/welcome">首页</a>
-              <!-- <router-link :to="'/index'" title="首页"> 首页 </router-link> -->
+            <li [ngClass]="{ 'active-menu': isFullPathActive('/') }">
+              <a routerLink="/">首页</a>
             </li>
 
             <li
               [ngClass]="{
-                'active-menu': isFullPathActive({ path: '/book-list' })
+                'active-menu': isFullPathActive('/book-list')
               }"
             >
               <a routerLink="/book-list">图书信息</a>
-              <!-- <router-link :to="{path:'/tushuxinxi'}" title="图书信息">
-                图书信息
-              </router-link> -->
             </li>
             <li
               [ngClass]="{
-                'active-menu': isFullPathActive({ path: '/gonggaoxinxi' })
+                'active-menu': isFullPathActive('/note-list')
               }"
             >
               <a routerLink="/note-list">公告信息</a>
-              <!-- <router-link :to="{path:'/gonggaoxinxi'}" title="公告信息">
-                公告信息
-              </router-link> -->
             </li>
             <template v-if="$session.cx == '用户'">
               <li
                 [ngClass]="{
-                  'active-menu': isFullPathActive({ path: '/wentifankui/add' })
+                  'active-menu': isFullPathActive('/user-edit')
                 }"
               >
-                <a routerLink="/wentifankui/add">问题反馈</a>
-                <!-- <router-link :to="{path:'/wentifankui/add'}" title="问题反馈">
-                  问题反馈
-                </router-link> -->
+                <a routerLink="/user-edit">问题反馈</a>
               </li>
             </template>
 
             <li
               [ngClass]="{
-                'active-menu': isFullPathActive({ path: '/user-edit' })
+                'active-menu': isFullPathActive('/user-edit')
               }"
             >
               <a routerLink="/user-edit">读者注册</a>
-              <!-- <router-link :to="{path:'/yonghu/add'}" title="读者注册">
-                读者注册
-              </router-link> -->
             </li>
             <li [ngClass]="{ 'active-menu': isFullPathActive('/login') }">
-              <a routerLink="/login">后台管理</a>
-              <!-- <router-link :to="'/login'" title="后台管理">
-                后台管理
-              </router-link> -->
+              <a routerLink="/login">登录</a>
             </li>
           </ul>
         </nav>

@@ -12,13 +12,17 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss'],
 })
-export class UserEditComponent implements OnInit {
+export class CategoryEditComponent implements OnInit {
   id: number = 0;
   type: string = '';
 
   token: string = '';
 
+  categoryList: any[] = [];
+
   ngOnInit(): void {
+    this.getCategoryList();
+
     this.route.queryParams.subscribe((params) => {
       this.id = params['id'];
       this.type = params['type'];
@@ -30,6 +34,7 @@ export class UserEditComponent implements OnInit {
 
     this.token = localStorage.getItem('token') || '';
   }
+
   validateForm: UntypedFormGroup;
 
   constructor(
@@ -39,13 +44,9 @@ export class UserEditComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.validateForm = this.fb.group({
-      username: [null, [Validators.required]],
-      password: [null, [Validators.required]],
-      realName: [null, [Validators.required]],
-      phone: [null, []],
-      email: [null, []],
-      avatar: [null, []],
-      role: ['0', []],
+      name: [null, [Validators.required]],
+      code: [null, [Validators.required]],
+      parentId: [null, [Validators.required]],
     });
   }
 
@@ -93,7 +94,7 @@ export class UserEditComponent implements OnInit {
     }
     if (info.file.status === 'done') {
       this.validateForm.patchValue({
-        avatar: info.file.response.data || '',
+        cover: info.file.response.data || '',
       });
     } else if (info.file.status === 'error') {
       this.message.error('上传失败');
@@ -108,14 +109,17 @@ export class UserEditComponent implements OnInit {
     this.ApiService.get('/user/' + this.id).subscribe((res: any) => {
       console.log(`res ->:`, res);
       this.validateForm.patchValue({
-        username: res.data.username,
-        password: res.data.password,
-        realName: res.data.realName,
-        phone: res.data.phone,
-        email: res.data.email,
-        avatar: res.data.avatar,
-        role: res.data.role,
+        name: res.data.name,
+        code: res.data.code,
+        parentId: res.data.parentId,
       });
+    });
+  }
+
+  getCategoryList() {
+    this.ApiService.get('/categories/list').subscribe((res: any) => {
+      console.log(`res ->:`, res);
+      this.categoryList = res.data;
     });
   }
 }

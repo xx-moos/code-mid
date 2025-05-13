@@ -42,7 +42,7 @@ export class ApiService {
       responseType?: 'json';
     }
   ): Observable<T> {
-    const url = `${this.baseUrl}${endpoint}`; 
+    const url = `${this.baseUrl}${endpoint}`;
     const token = localStorage.getItem('token');
 
     const feature = {
@@ -93,6 +93,35 @@ export class ApiService {
     return this.http
       .post<T>(url, body, feature)
       .pipe(catchError(this.handleError));
+  }
+
+  delete<T>(
+    endpoint: string,
+    options?: {
+      params?:
+        | HttpParams
+        | {
+            [param: string]:
+              | string
+              | number
+              | boolean
+              | ReadonlyArray<string | number | boolean>;
+          };
+      headers?: HttpHeaders | { [header: string]: string | string[] };
+      observe?: 'body';
+      responseType?: 'json';
+    }
+  ): Observable<T> {
+    const url = `${this.baseUrl}${endpoint}`;
+    const token = localStorage.getItem('token');
+
+    const feature = {
+      ...options,
+      headers: new HttpHeaders({
+        Authorization: token ? `Bearer ${token}` : '',
+      }),
+    };
+    return this.http.delete<T>(url, feature).pipe(catchError(this.handleError));
   }
 
   /**

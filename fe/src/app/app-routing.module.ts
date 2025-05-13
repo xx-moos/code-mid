@@ -9,8 +9,13 @@ import { ReaderDashboardComponent } from './pages/reader/reader-dashboard.compon
 import { AdminDashboardComponent } from './pages/admin/admin-dashboard.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { ListComponent } from './pages/book/list/list.component';
-import { NoteListComponent } from './pages/note/list/list.component'; 
+import { NoteListComponent } from './pages/note/list/list.component';
 import { UserEditComponent } from './pages/user/edit/edit.component';
+import { UserListComponent } from './pages/user/list/list.component';
+import { BookEditComponent } from './pages/book/admin-edit/edit.component';
+import { BookListComponent } from './pages/book/admin-list/list.component';
+
+import { CategoryListComponent } from './pages/category/list/list.component';
 
 const routes: Routes = [
   // 公共路由: 登录页
@@ -26,29 +31,37 @@ const routes: Routes = [
       { path: 'book-list', component: ListComponent },
       { path: 'note-list', component: NoteListComponent },
       { path: 'user-edit', component: UserEditComponent },
-      // 读者区域路由 (需要登录)
-      {
-        path: 'reader',
-        // canActivate: [AuthGuard], // 使用认证守卫
-        // 可以在这里添加 canActivateChild 守卫进行更细粒度的控制
-        children: [
-          { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // 默认重定向到仪表盘
-          // { path: 'dashboard', component: ReaderDashboardComponent },
-          // ... 其他读者页面路由
-        ],
-      },
-      // 管理员区域路由 (需要登录和角色验证 - 在 AuthGuard 中实现或使用 RoleGuard)
-      {
-        path: 'admin',
-        canActivate: [AuthGuard], // 使用认证守卫 (需要包含角色检查)
-        data: { expectedRole: 'admin' }, // 将期望角色传递给守卫
-        children: [
-          { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-          { path: 'dashboard', component: AdminDashboardComponent },
-          // ... 其他管理员页面路由
-        ],
-      },
+
       // ... 其他需要主布局的公共页面路由可以放在这里
+    ],
+  },
+  // 读者区域路由 (需要登录)
+  {
+    path: 'reader',
+    // canActivate: [AuthGuard], // 使用认证守卫
+    // 可以在这里添加 canActivateChild 守卫进行更细粒度的控制
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // 默认重定向到仪表盘
+      // { path: 'dashboard', component: ReaderDashboardComponent },
+      // ... 其他读者页面路由
+    ],
+  },
+  // 管理员区域路由 (需要登录和角色验证 - 在 AuthGuard 中实现或使用 RoleGuard)
+  {
+    path: 'admin',
+    canActivate: [AuthGuard], // 使用认证守卫 (需要包含角色检查)
+    data: { expectedRole: 'admin' }, // 将期望角色传递给守卫
+    component: AdminDashboardComponent,
+    children: [
+      { path: '', redirectTo: 'user-list', pathMatch: 'full' },
+      // { path: 'dashboard', component: AdminDashboardComponent },
+      { path: 'user-list', component: UserListComponent },
+      { path: 'user-edit', component: UserEditComponent },
+
+      { path: 'book-list', component: BookListComponent },
+      { path: 'book-edit', component: BookEditComponent },
+
+      { path: 'category-list', component: CategoryListComponent },
     ],
   },
 

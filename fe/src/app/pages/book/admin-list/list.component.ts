@@ -6,11 +6,11 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-list',
+  selector: 'app-book-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
 })
-export class UserListComponent implements OnInit {
+export class BookListComponent implements OnInit {
   validateForm!: UntypedFormGroup;
 
   loading = false;
@@ -18,7 +18,7 @@ export class UserListComponent implements OnInit {
   search = {
     current: 1,
     size: 10,
-    username: '',
+    name: '',
   };
 
   lists: any = [];
@@ -47,7 +47,7 @@ export class UserListComponent implements OnInit {
     this.loading = true;
     this.search.current = page;
 
-    this.apiService.get('/user/page', { params: this.search }).subscribe(
+    this.apiService.get('/book/page', { params: this.search }).subscribe(
       (res: any) => {
         this.loading = false;
         console.log(`res ->:`, res);
@@ -71,7 +71,7 @@ export class UserListComponent implements OnInit {
     this.loadList(size);
   };
 
-  deleteUser = (ids: any) => {
+  deleteItem = (ids: any) => {
     console.log(`ids ->:`, ids);
     this.apiService.delete('/user/' + ids).subscribe(
       (res: any) => {
@@ -84,19 +84,19 @@ export class UserListComponent implements OnInit {
     );
   };
 
-  addUser = () => {
-    this.router.navigate(['/admin/user-edit'], {
+  addItem = () => {
+    this.router.navigate(['/admin/book-edit'], {
       queryParams: {
         type: 'admin',
       },
     });
   };
 
-  editUser = (user: any) => {
-    this.router.navigate(['/admin/user-edit'], {
+  editItem = (book: any) => {
+    this.router.navigate(['/admin/book-edit'], {
       queryParams: {
         type: 'admin',
-        id: user.id,
+        id: book.id,
       },
     });
   };

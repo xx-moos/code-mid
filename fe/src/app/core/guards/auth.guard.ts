@@ -1,24 +1,32 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import {
+  CanActivate,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  UrlTree,
+  Router,
+} from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service'; // 稍后取消注释 -> 取消注释
 
 @Injectable({
-  providedIn: 'root' // 或者在 CoreModule 中提供
+  providedIn: 'root', // 或者在 CoreModule 中提供
 })
 export class AuthGuard implements CanActivate {
-
   constructor(private authService: AuthService, private router: Router) {}
   // constructor(private router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
+    state: RouterStateSnapshot
+  ):
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
     // 这里是基础的 Token 检查逻辑
     // 实际实现需要调用 AuthService 的 isAuthenticated 方法
     const isAuthenticated = this.authService.isAuthenticated(); // 示例调用
-    // const isAuthenticated = false; // 临时值，待 AuthService 实现后替换
 
     if (isAuthenticated) {
       // 如果已认证，允许访问
@@ -35,7 +43,9 @@ export class AuthGuard implements CanActivate {
     } else {
       // 如果未认证，重定向到登录页面，并传递当前尝试访问的 URL
       // console.log('Not authenticated, redirecting to login...'); // 调试日志
-      return this.router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
+      return this.router.createUrlTree(['/login'], {
+        queryParams: { returnUrl: state.url },
+      });
     }
   }
-} 
+}

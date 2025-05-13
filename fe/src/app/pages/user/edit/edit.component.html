@@ -1,7 +1,10 @@
 <div class="views-yonghu-web-add">
   <div>
     <app-e-container>
-      <nz-card class="box-card" nzTitle="读者用户注册">
+      <nz-card
+        class="box-card"
+        [nzTitle]="type === 'admin' ? '用户注册' : '读者用户注册'"
+      >
         <!-- <template #header>
           <div class="clearfix">
             <span class="title"> 读者用户注册 </span>
@@ -27,11 +30,7 @@
             </nz-form-control>
           </nz-form-item>
 
-          <nz-form-item
-            prop="mima"
-            required
-            :rules="[{required:true, message:'请填写密码'}]"
-          >
+          <nz-form-item *ngIf="!id">
             <nz-form-label nzRequired>密码</nz-form-label>
             <nz-form-control nzErrorTip="请填写密码">
               <input
@@ -67,6 +66,21 @@
             </nz-form-control>
           </nz-form-item>
 
+          <nz-form-item *ngIf="type === 'admin'">
+            <nz-form-label>角色</nz-form-label>
+            <nz-form-control>
+              <nz-radio-group
+                formControlName="role"
+                style="width: 100%"
+                id="role"
+                name="role"
+              >
+                <label nz-radio nzValue="0">用户</label>
+                <label nz-radio nzValue="1">工作人员</label>
+              </nz-radio-group>
+            </nz-form-control>
+          </nz-form-item>
+
           <nz-form-item>
             <nz-form-label>邮箱</nz-form-label>
             <nz-form-control>
@@ -86,7 +100,18 @@
                 nzAction="http://localhost:8080/bapi/file/upload"
                 [nzHeaders]="{ authorization: 'Bearer ' + this.token }"
                 (nzChange)="handleChange($event)"
+                [nzShowUploadList]="false"
               >
+                <img
+                  *ngIf="this.validateForm.get('avatar')?.value"
+                  [src]="
+                    this.validateForm.get('avatar')?.value
+                      ? 'http://localhost:8080' +
+                        this.validateForm.get('avatar')?.value
+                      : ''
+                  "
+                  style="width: 120px; height: 120px"
+                />
                 <button
                   nz-button
                   nzType="primary"
