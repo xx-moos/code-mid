@@ -28,21 +28,33 @@
       <nz-table #basicTable [nzData]="lists">
         <thead>
           <tr>
-            <th>姓名</th>
-            <th>真实姓名</th>
-            <th>联系电话</th>
-            <th>邮箱</th>
-            <th>头像</th>
+            <th>封面</th>
+            <th>书名</th>
+            <th>分类</th>
+            <th>作者</th>
+            <th>出版社</th>
+            <th>出版日期</th>
+            <th>库存</th>
+            <th>状态</th>
             <th>操作</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let data of basicTable.data">
-            <td>{{ data?.username }}</td>
-            <td>{{ data?.realName }}</td>
-            <td>{{ data?.phone }}</td>
-            <td>{{ data?.email }}</td>
-            <td>{{ data?.avatar }}</td>
+            <td>
+              <img
+                [src]="'http://localhost:8080' + data?.cover"
+                alt="封面"
+                style="width: 100px; height: 100px"
+              />
+            </td>
+            <td>{{ data?.name }}</td>
+            <td>{{ data?.category }}</td>
+            <td>{{ data?.author }}</td>
+            <td>{{ data?.publisher }}</td>
+            <td>{{ data?.publishDate }}</td>
+            <td>{{ data?.stock }}</td>
+            <td>{{ data?.status == 0 ? '上架中' : '已下架' }}</td>
             <td>
               <nz-space>
                 <a *nzSpaceItem (click)="editItem(data)">编辑</a>

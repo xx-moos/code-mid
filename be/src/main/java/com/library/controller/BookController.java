@@ -55,7 +55,7 @@ public class BookController {
 
   @ApiOperation("新增图书")
   @PostMapping
-  @PreAuthorize("hasRole('ADMIN')")
+//  @PreAuthorize("hasRole('ADMIN')")
   public Result<Void> save(@Valid @RequestBody Book book) {
     boolean result = bookService.save(book);
     return result ? Result.success() : Result.failed("新增图书失败");
@@ -63,7 +63,7 @@ public class BookController {
 
   @ApiOperation("修改图书")
   @PutMapping
-  @PreAuthorize("hasRole('ADMIN')")
+//  @PreAuthorize("hasRole('ADMIN')")
   public Result<Void> update(@Valid @RequestBody Book book) {
     boolean result = bookService.updateById(book);
     return result ? Result.success() : Result.failed("修改图书失败");
@@ -71,7 +71,7 @@ public class BookController {
 
   @ApiOperation("删除图书")
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole('ADMIN')")
+//  @PreAuthorize("hasRole('ADMIN')")
   public Result<Void> delete(@PathVariable Long id) {
     boolean result = bookService.removeById(id);
     return result ? Result.success() : Result.failed("删除图书失败");
@@ -79,7 +79,7 @@ public class BookController {
 
   @ApiOperation("更新图书库存")
   @PutMapping("/stock/{id}")
-  @PreAuthorize("hasRole('ADMIN')")
+//  @PreAuthorize("hasRole('ADMIN')")
   public Result<Void> updateStock(
       @ApiParam("图书ID") @PathVariable Long id,
       @ApiParam("库存变化量（正数增加，负数减少）") @RequestParam Integer stock) {

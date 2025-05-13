@@ -28,6 +28,7 @@
       <nz-table #basicTable [nzData]="lists">
         <thead>
           <tr>
+            <th>id</th>
             <th>分类名称</th>
             <th>分类编码</th>
             <th>父分类ID</th>
@@ -36,9 +37,10 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of basicTable.data">
+            <td>{{ data?.id }}</td>
             <td>{{ data?.name }}</td>
             <td>{{ data?.code }}</td>
-            <td>{{ data?.parent_id }}</td>
+            <td>{{ data?.parentId }}</td>
             <td>
               <nz-space>
                 <a *nzSpaceItem (click)="editItem(data)">编辑</a>

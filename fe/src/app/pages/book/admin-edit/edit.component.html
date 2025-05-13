@@ -22,27 +22,17 @@
           </nz-form-control>
         </nz-form-item>
 
-        <nz-form-item *ngIf="!id">
+        <nz-form-item>
           <nz-form-label nzRequired>ISBN</nz-form-label>
           <nz-form-control nzErrorTip="请填写ISBN">
-            <input
-              nz-input
-              formControlName="isbn"
-              type="password"
-              placeholder="输入ISBN"
-            />
+            <input nz-input formControlName="isbn" placeholder="输入ISBN" />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label nzRequired>作者</nz-form-label>
           <nz-form-control nzErrorTip="请填写作者">
-            <input
-              nz-input
-              formControlName="author"
-              type="text"
-              placeholder="输入作者"
-            />
+            <input nz-input formControlName="author" placeholder="输入作者" />
           </nz-form-control>
         </nz-form-item>
 
@@ -50,7 +40,11 @@
           <nz-form-label nzRequired>分类</nz-form-label>
           <nz-form-control nzErrorTip="请选择分类">
             <nz-select formControlName="category" nzPlaceHolder="请选择分类">
-              <nz-option nzValue="0" nzLabel="小说"></nz-option>
+              <nz-option
+                *ngFor="let item of categoryList"
+                [nzValue]="item.code"
+                [nzLabel]="item.name"
+              ></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -63,18 +57,6 @@
               formControlName="stock"
               type="text"
               placeholder="输入库存"
-            />
-          </nz-form-control>
-        </nz-form-item>
-
-        <nz-form-item>
-          <nz-form-label nzRequired>总库存</nz-form-label>
-          <nz-form-control nzErrorTip="请填写总库存">
-            <input
-              nz-input
-              formControlName="totalStock"
-              type="text"
-              placeholder="输入总库存"
             />
           </nz-form-control>
         </nz-form-item>
@@ -103,18 +85,6 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>价格</nz-form-label>
-          <nz-form-control>
-            <input
-              nz-input
-              formControlName="price"
-              type="text"
-              placeholder="输入价格"
-            />
-          </nz-form-control>
-        </nz-form-item>
-
-        <nz-form-item>
           <nz-form-label>状态</nz-form-label>
           <nz-form-control>
             <nz-radio-group formControlName="status">
@@ -126,18 +96,6 @@
 
         <nz-form-item>
           <nz-form-label>图书简介</nz-form-label>
-          <nz-form-control>
-            <input
-              nz-input
-              formControlName="description"
-              type="text"
-              placeholder="输入描述"
-            />
-          </nz-form-control>
-        </nz-form-item>
-
-        <nz-form-item>
-          <nz-form-label>封面</nz-form-label>
           <nz-form-control>
             <input
               nz-input

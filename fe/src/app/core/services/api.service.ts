@@ -124,6 +124,30 @@ export class ApiService {
     return this.http.delete<T>(url, feature).pipe(catchError(this.handleError));
   }
 
+  put<T>(
+    endpoint: string,
+    body: any | null,
+    options?: {
+      params?: HttpParams | { [param: string]: string | string[] };
+      headers?: HttpHeaders | { [header: string]: string | string[] };
+      observe?: 'body';
+      responseType?: 'json';
+    }
+  ): Observable<T> {
+    const url = `${this.baseUrl}${endpoint}`;
+    const token = localStorage.getItem('token');
+
+    const feature = {
+      ...options,
+      headers: new HttpHeaders({
+        Authorization: token ? `Bearer ${token}` : '',
+      }),
+    };
+    return this.http
+      .put<T>(url, body, feature)
+      .pipe(catchError(this.handleError));
+  }
+
   /**
    * 私有错误处理方法
    * @param error HTTP 错误响应对象

@@ -6,7 +6,7 @@ import {
 } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ApiService } from '../../../core/services/api.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
@@ -41,7 +41,8 @@ export class BookEditComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private message: NzMessageService,
     private ApiService: ApiService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.validateForm = this.fb.group({
       name: [null, [Validators.required]],
@@ -49,7 +50,6 @@ export class BookEditComponent implements OnInit {
       author: [null, [Validators.required]],
       category: [null, [Validators.required]],
       stock: [null, [Validators.required]],
-      totalStock: [null, [Validators.required]],
       publisher: [null, []],
       publishDate: [null, []],
       price: [null, []],
@@ -72,19 +72,36 @@ export class BookEditComponent implements OnInit {
       return;
     }
 
-    this.ApiService.post('/user', {
-      ...this.validateForm.value,
-    }).subscribe(
-      (res) => {
-        console.log(res);
-        this.message.success('注册成功');
-        this.resetForm();
-      },
-      (error) => {
-        console.log(error);
-        this.message.error('注册失败');
-      }
-    );
+    if (this.id) {
+      this.ApiService.put('/book/', {
+        ...this.validateForm.value,
+        id: this.id,
+      }).subscribe(
+        (res) => {
+          console.log(res);
+          this.message.success('成功');
+          this.router.navigate(['/admin/book-list']);
+        },
+        (error) => {
+          console.log(error);
+          this.message.error('失败');
+        }
+      );
+    } else {
+      this.ApiService.post('/book', {
+        ...this.validateForm.value,
+      }).subscribe(
+        (res) => {
+          console.log(res);
+          this.message.success('成功');
+          this.router.navigate(['/admin/book-list']);
+        },
+        (error) => {
+          console.log(error);
+          this.message.error('失败');
+        }
+      );
+    }
   }
 
   resetForm(): void {
@@ -115,7 +132,7 @@ export class BookEditComponent implements OnInit {
   }
 
   getUserInfo() {
-    this.ApiService.get('/user/' + this.id).subscribe((res: any) => {
+    this.ApiService.get('/book/' + this.id).subscribe((res: any) => {
       console.log(`res ->:`, res);
       this.validateForm.patchValue({
         name: res.data.name,
@@ -123,13 +140,12 @@ export class BookEditComponent implements OnInit {
         author: res.data.author,
         category: res.data.category,
         stock: res.data.stock,
-        totalStock: res.data.totalStock,
         publisher: res.data.publisher,
         publishDate: res.data.publishDate,
         price: res.data.price,
         description: res.data.description,
         cover: res.data.cover,
-        status: res.data.status,
+        status: '' + res.data.status,
       });
     });
   }

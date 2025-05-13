@@ -46,94 +46,18 @@ public class BookCategoryServiceImpl implements IBookCategoryService {
 
   @Override
   public List<BookCategoryVO> getCategoryList(BookCategoryQueryDTO queryDTO) {
-    // 1. 动态缓存键生成
-    StringBuilder keyBuilder = new StringBuilder(Constants.BOOK_CATEGORY_PREFIX);
-    boolean hasName = StringUtils.hasText(queryDTO.getName());
-    boolean hasCode = StringUtils.hasText(queryDTO.getCode());
-
-    if (hasName) {
-      keyBuilder.append(":name=").append(queryDTO.getName());
-    }
-    if (hasCode) {
-      keyBuilder.append(":code=").append(queryDTO.getCode());
-    }
-    if (!hasName && !hasCode) {
-      keyBuilder.append(":all");
-    }
-    String redisKey = keyBuilder.toString();
-
-    // 2. 尝试从 Redis 读取缓存
-    List<BookCategory> cachedCategories = null;
-    try {
-      // 假设 redisUtil.get 返回的是 List<BookCategory> 或可转换为 List<BookCategory> 的对象
-      // 如果 RedisUtil 返回的是 JSON 字符串，则需要进行反序列化
-      // e.g., using Jackson:
-      // String cachedJson = (String) redisUtil.get(redisKey);
-      // if (StringUtils.hasText(cachedJson)) {
-      //   ObjectMapper objectMapper = new ObjectMapper(); // 需要注入或静态化
-      //   cachedCategories = objectMapper.readValue(cachedJson, new TypeReference<List<BookCategory>>() {});
-      // }
-      // 为简化，我们先直接尝试强转，实际项目中应根据 RedisUtil 的具体实现调整
-      Object rawCachedObject = redisUtil.get(redisKey);
-      if (rawCachedObject instanceof List) {
-          // 进行类型安全的转换，避免 ClassCastException
-          // 这仍然是一个简化的假设，实际中可能需要更复杂的反序列化逻辑
-          // 特别是当 List 元素是自定义对象时，泛型信息在运行时会被擦除
-          // 一个更健壮的方式是 redisUtil 提供类似 getList(key, ElementType.class) 的方法
-          // 或者如上注释中所示，使用JSON库配合TypeReference
-          cachedCategories = (List<BookCategory>) rawCachedObject;
-
-          // 确保列表中的元素确实是 BookCategory 类型 (进一步的运行时检查, 可选但更安全)
-          // if (cachedCategories != null && !cachedCategories.isEmpty()) {
-          //    if (!(cachedCategories.get(0) instanceof BookCategory)) {
-          //        logger.warn("Cached object for key '{}' is a list but not of BookCategory. Cache will be ignored.", redisKey);
-          //        cachedCategories = null; //  如果类型不匹配则忽略缓存
-          //    }
-          // }
-      }
-    } catch (Exception e) {
-      logger.error("Error retrieving from Redis cache for key '{}': {}", redisKey, e.getMessage(), e);
-      // 发生异常时，表现为缓存未命中
-      cachedCategories = null;
-    }
-
-    // 3. 缓存命中处理
-    if (cachedCategories != null && !cachedCategories.isEmpty()) {
-      logger.info("Cache hit for key: {}", redisKey);
-      // 转换成 VO
-      return cachedCategories.stream().map(category -> {
-        BookCategoryVO vo = new BookCategoryVO();
-        BeanUtils.copyProperties(category, vo);
-        return vo;
-      }).collect(Collectors.toList());
-    }
-
-    logger.info("Cache miss for key: {}. Fetching from database.", redisKey);
-    // 4. 缓存未命中处理 (现有逻辑)
     LambdaQueryWrapper<BookCategory> wrapper = new LambdaQueryWrapper<>();
 
     // 添加查询条件
-    wrapper.like(hasName, BookCategory::getName, queryDTO.getName());
-    wrapper.eq(hasCode, BookCategory::getCode, queryDTO.getCode());
+    wrapper.like(StringUtils.hasText(queryDTO.getName()), BookCategory::getName, queryDTO.getName());
+    wrapper.eq(StringUtils.hasText(queryDTO.getCode()), BookCategory::getCode, queryDTO.getCode());
 
     // 添加排序
     wrapper.orderByAsc(BookCategory::getSort).orderByAsc(BookCategory::getId);
 
     List<BookCategory> categories = bookCategoryMapper.selectList(wrapper);
 
-    // 5. 将数据库查询结果存入 Redis
-    // String redisKey = Constants.BOOK_CATEGORY_PREFIX; // 旧的静态键，已被新的动态 redisKey 替代
-    if (categories != null && !categories.isEmpty()) {
-        try {
-            redisUtil.set(redisKey, categories); // 使用动态生成的 redisKey
-            logger.info("Stored data in cache for key: {}", redisKey);
-        } catch (Exception e) {
-            logger.error("Error storing to Redis cache for key '{}': {}", redisKey, e.getMessage(), e);
-        }
-    }
-
-
-    // 6. 转换成 VO
+    // 转换成 VO
     return categories.stream().map(category -> {
       BookCategoryVO vo = new BookCategoryVO();
       BeanUtils.copyProperties(category, vo);

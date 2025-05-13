@@ -1,6 +1,7 @@
 <div class="views-yonghu-web-add">
   <div>
-    <nz-card class="box-card" [nzTitle]="id ? '图书类别编辑' : '图书类别新增'">
+    <!-- [nzTitle]="id ? '图书类别编辑' : '图书类别新增'" -->
+    <nz-card class="box-card">
       <form
         nz-form
         [formGroup]="validateForm"
@@ -16,26 +17,25 @@
           </nz-form-control>
         </nz-form-item>
 
-        <nz-form-item *ngIf="!id">
+        <nz-form-item>
           <nz-form-label nzRequired>分类编码</nz-form-label>
           <nz-form-control nzErrorTip="请填写分类编码">
-            <input
-              nz-input
-              formControlName="code"
-              type="password"
-              placeholder="输入分类编码"
-            />
+            <input nz-input formControlName="code" placeholder="输入分类编码" />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label nzRequired>父分类ID</nz-form-label>
-          <nz-form-control nzErrorTip="请选择父分类ID">
+          <nz-form-label>父分类ID</nz-form-label>
+          <nz-form-control>
             <nz-select
               formControlName="parentId"
               nzPlaceHolder="请选择父分类ID"
             >
-              <nz-option nzValue="0" nzLabel="小说"></nz-option>
+              <nz-option
+                *ngFor="let item of categoryList"
+                [nzValue]="item.code"
+                [nzLabel]="item.name"
+              ></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>

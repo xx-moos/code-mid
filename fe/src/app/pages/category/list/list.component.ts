@@ -73,8 +73,7 @@ export class CategoryListComponent implements OnInit {
   };
 
   deleteItem = (ids: any) => {
-    console.log(`ids ->:`, ids);
-    this.apiService.delete('/user/' + ids).subscribe(
+    this.apiService.delete('/categories/' + ids).subscribe(
       (res: any) => {
         this.message.success('删除成功');
         this.loadList(1);
@@ -86,30 +85,38 @@ export class CategoryListComponent implements OnInit {
   };
 
   addItem = () => {
-    this.modal.create({
+    const modalRef = this.modal.create({
       nzTitle: '新增图书类别',
       nzContent: CategoryEditComponent,
-      nzOkText: '提交',
-      nzCancelText: '取消',
+      nzFooter: null,
     });
 
+    modalRef.afterClose.subscribe((result) => {
+      if (result) {
+        this.loadList(1);
+      }
+    });
+  };
 
+  editItem = (category: any) => {
+    const modalRef = this.modal.create({
+      nzTitle: '编辑图书类别',
+      nzContent: CategoryEditComponent,
+      nzFooter: null,
+      nzData: category,
+    });
+
+    modalRef.afterClose.subscribe((result) => {
+      if (result) {
+        this.loadList(1);
+      }
+    });
 
     // this.router.navigate(['/admin/book-edit'], {
     //   queryParams: {
     //     type: 'admin',
+    //     id: book.id,
     //   },
     // });
-
-
-  };
-
-  editItem = (book: any) => {
-    this.router.navigate(['/admin/book-edit'], {
-      queryParams: {
-        type: 'admin',
-        id: book.id,
-      },
-    });
   };
 }

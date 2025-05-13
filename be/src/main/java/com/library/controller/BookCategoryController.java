@@ -79,7 +79,7 @@ public class BookCategoryController {
      * @return 统一响应结果 (成功或失败)
      */
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public Result<Void> createCategory(@Valid @RequestBody BookCategoryCreateDTO createDTO) {
         boolean success = bookCategoryService.createCategory(createDTO);
         return success ? Result.success() : Result.failed("创建分类失败");
@@ -93,7 +93,7 @@ public class BookCategoryController {
      * @return 统一响应结果 (成功或失败)
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public Result<Void> updateCategory(@PathVariable Long id, @Valid @RequestBody BookCategoryUpdateDTO updateDTO) {
         if (!Objects.equals(id, updateDTO.getId())) {
             return Result.failed("路径ID与请求体ID不一致");
@@ -109,7 +109,7 @@ public class BookCategoryController {
      * @return 统一响应结果 (成功或失败)
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public Result<Void> deleteCategory(@PathVariable Long id) {
         boolean success = bookCategoryService.deleteCategory(id);
         return success ? Result.success() : Result.failed("删除分类失败");

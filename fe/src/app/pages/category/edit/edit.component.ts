@@ -7,6 +7,8 @@ import {
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ApiService } from '../../../core/services/api.service';
 import { ActivatedRoute } from '@angular/router';
+import { NzModalRef } from 'ng-zorro-antd/modal';
+
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
@@ -20,18 +22,12 @@ export class CategoryEditComponent implements OnInit {
 
   categoryList: any[] = [];
 
+  editData: any = {};
+
   ngOnInit(): void {
     this.getCategoryList();
 
-    this.route.queryParams.subscribe((params) => {
-      this.id = params['id'];
-      this.type = params['type'];
-    });
-
-    if (this.id) {
-      this.getUserInfo();
-    }
-
+    this.getInfoData();
     this.token = localStorage.getItem('token') || '';
   }
 
@@ -41,12 +37,13 @@ export class CategoryEditComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private message: NzMessageService,
     private ApiService: ApiService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private modalRef: NzModalRef
   ) {
     this.validateForm = this.fb.group({
       name: [null, [Validators.required]],
       code: [null, [Validators.required]],
-      parentId: [null, [Validators.required]],
+      parentId: [null, []],
     });
   }
 
@@ -63,19 +60,38 @@ export class CategoryEditComponent implements OnInit {
       return;
     }
 
-    this.ApiService.post('/user', {
-      ...this.validateForm.value,
-    }).subscribe(
-      (res) => {
-        console.log(res);
-        this.message.success('注册成功');
-        this.resetForm();
-      },
-      (error) => {
-        console.log(error);
-        this.message.error('注册失败');
-      }
-    );
+    if (this.editData.id) {
+      this.ApiService.put('/categories/' + this.editData.id, {
+        ...this.validateForm.value,
+        id: this.editData.id,
+      }).subscribe(
+        (res) => {
+          console.log(res);
+          this.message.success('操作成功');
+          this.resetForm();
+          this.modalRef.close(true);
+        },
+        (error) => {
+          console.log(error);
+          this.message.error('操作失败');
+        }
+      );
+    } else {
+      this.ApiService.post('/categories', {
+        ...this.validateForm.value,
+      }).subscribe(
+        (res) => {
+          console.log(res);
+          this.message.success('操作成功');
+          this.resetForm();
+          this.modalRef.close(true);
+        },
+        (error) => {
+          console.log(error);
+          this.message.error('操作失败');
+        }
+      );
+    }
   }
 
   resetForm(): void {
@@ -105,21 +121,20 @@ export class CategoryEditComponent implements OnInit {
     event.preventDefault();
   }
 
-  getUserInfo() {
-    this.ApiService.get('/user/' + this.id).subscribe((res: any) => {
-      console.log(`res ->:`, res);
-      this.validateForm.patchValue({
-        name: res.data.name,
-        code: res.data.code,
-        parentId: res.data.parentId,
-      });
+  getInfoData() {
+    const res = this.modalRef.getConfig()?.nzData;
+    this.editData = res;
+    console.log(`res ->:`, res);
+    this.validateForm.patchValue({
+      name: res.name,
+      code: res.code,
+      parentId: res.parentId,
     });
   }
 
   getCategoryList() {
     this.ApiService.get('/categories/list').subscribe((res: any) => {
-      console.log(`res ->:`, res);
-      this.categoryList = res.data;
+      this.categoryList = res.data || [];
     });
   }
 }

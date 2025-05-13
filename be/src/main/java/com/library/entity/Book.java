@@ -51,23 +51,12 @@ public class Book extends BaseEntity {
     @TableField("category")
     private String category;
 
-    /**
-     * 价格
-     */
-    @TableField("price")
-    private BigDecimal price;
 
     /**
      * 库存数量
      */
     @TableField("stock")
     private Integer stock;
-
-    /**
-     * 总库存
-     */
-    @TableField("total_stock")
-    private Integer totalStock;
 
     /**
      * 简介
@@ -90,6 +79,6 @@ public class Book extends BaseEntity {
     /**
      * 借阅次数
      */
-    @TableField("borrow_times")
-    private Integer borrowTimes;
+    @TableField("borrow_count")
+    private Integer borrowCount;
 } 
