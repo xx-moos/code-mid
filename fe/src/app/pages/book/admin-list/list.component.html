@@ -25,7 +25,7 @@
         <button nz-button nzType="primary" (click)="addItem()">新增</button>
       </div>
       <br />
-      <nz-table #basicTable [nzData]="lists">
+      <nz-table #basicTable  [nzShowPagination]="false"  [nzData]="lists">
         <thead>
           <tr>
             <th>封面</th>
