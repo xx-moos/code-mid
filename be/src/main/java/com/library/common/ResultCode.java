@@ -25,7 +25,13 @@ public enum ResultCode {
     BOOK_ALREADY_BORROWED(3002, "图书已被借阅"),
     CREDIT_SCORE_LIMIT(3003, "失信值过高，暂停借阅"),
     BOOK_NOT_BORROWED(3004, "此书籍未被借阅"),
-    RENEW_NOT_ALLOWED(3005, "不允许续借");
+    RENEW_NOT_ALLOWED(3005, "不允许续借"),
+
+    // 评论相关
+    COMMENT_NOT_EXIST(4001, "评论不存在"),
+    COMMENT_PARENT_NOT_EXIST(4002, "父评论不存在"),
+    COMMENT_NOT_APPROVED_CANNOT_LIKE(4003, "评论未审核通过，无法点赞");
+
 
     private int code;
     private String message;

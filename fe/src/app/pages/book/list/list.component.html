@@ -38,12 +38,54 @@
               <nz-tree
                 [nzData]="nodes"
                 (nzClick)="nzEvent($event)"
-                [nzExpandAll]
+                [nzExpandAll]="true"
               ></nz-tree>
             </div>
 
             <div nz-col [nzSpan]="20">
-              table
+              <div nz-row [nzGutter]="30">
+                <div
+                  nz-col
+                  [nzSpan]="6"
+                  *ngFor="let r of lists"
+                  :key="r.id"
+                  style="margin-bottom: 20px"
+                >
+                  <article class="single_product v-module-xiezi">
+                    <figure>
+                      <div class="product_thumb" (click)="gotoDetail(r.id)">
+                        <div class="label_product"></div>
+                        <img
+                          class="primary_img"
+                          [src]="'http://localhost:8080' + r.cover"
+                          pb="100"
+                          :is-scale="true"
+                        />
+                      </div>
+                      <figcaption class="product_content">
+                        <h4 class="product_name">
+                          <a href="javascript:;" (click)="gotoDetail(r.id)">
+                            {{ r.name }}</a
+                          >
+                        </h4>
+                        <div class="price_box">
+                          <span class="current_price"
+                            >借阅次数：{{ r.borrowCount }}</span
+                          >
+                        </div>
+                        <div class="add_to_cart">
+                          <a
+                            href="javascript:;"
+                            title="查看详情"
+                            (click)="gotoDetail(r.id)"
+                            >查看详情</a
+                          >
+                        </div>
+                      </figcaption>
+                    </figure>
+                  </article>
+                </div>
+              </div>
 
               <div class="e-pages" style="margin-top: 10px; text-align: center">
                 <nz-pagination

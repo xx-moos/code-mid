@@ -3,12 +3,12 @@
     <nz-card class="box-card" [nzTitle]="'评论查询'">
       <div class="">
         <nz-space nzAlign="center">
-          <span *nzSpaceItem>用户</span>
+          <span *nzSpaceItem>书籍</span>
           <input
             *nzSpaceItem
             nz-input
-            [(ngModel)]="search.title"
-            placeholder="输入标题"
+            [(ngModel)]="search.bookId"
+            placeholder="输入书籍ID"
           />
           <button
             *nzSpaceItem
@@ -47,10 +47,19 @@
                 <a
                   *nzSpaceItem
                   nz-popconfirm
-                  nzPopconfirmTitle="审核通过吗？"
+                  nzPopconfirmTitle="确认审核通过吗？"
                   nzPopconfirmPlacement="bottom"
-                  (nzOnConfirm)="auditItem(data.id)"
-                  >审核</a
+                  (nzOnConfirm)="auditItem(data.id, 1)"
+                  >审核通过</a
+                >
+                <a
+                  style="color: red"
+                  *nzSpaceItem
+                  nz-popconfirm
+                  nzPopconfirmTitle="确认审核拒绝吗？"
+                  nzPopconfirmPlacement="bottom"
+                  (nzOnConfirm)="auditItem(data.id, 2)"
+                  >审核拒绝</a
                 >
               </nz-space>
             </td>

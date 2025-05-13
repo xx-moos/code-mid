@@ -6,6 +6,9 @@ import com.library.dto.LoginDTO;
 import com.library.dto.RegisterDTO;
 import com.library.entity.User;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * 用户服务接口
  */
@@ -67,4 +70,12 @@ public interface UserService extends IService<User> {
    * @return 分页结果
    */
   Page<User> pageUsers(Page<User> page, String username, Integer status);
+
+  /**
+   * 根据用户ID列表批量查询用户信息
+   *
+   * @param userIds 用户ID列表
+   * @return 用户列表
+   */
+  List<User> listUsersByIds(Collection<Long> userIds);
 }

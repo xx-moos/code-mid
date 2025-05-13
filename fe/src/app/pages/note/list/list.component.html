@@ -33,7 +33,50 @@
             </form>
           </div>
 
-          <div nz-col [nzSpan]="20">table</div>
+          <div class="listBoxs news-styles2" style="margin-top: 20px">
+            <!-- 咨询容器开始 -->
+            <div class="p_news">
+              <div
+                class="list"
+                (click)="gotoDetail(r.id)"
+                *ngFor="let r of lists"
+                :key="r.id"
+              >
+                <!-- 图片显示结束 -->
+                <div class="cotentBox">
+                  <!-- 时间开始 -->
+                  <div class="listTimeBox hidden-style2">
+                    {{ r.createTime }}
+                  </div>
+                  <!-- 时间结束 -->
+                  <!-- 标题概述开始 -->
+                  <div class="listCotentBox">
+                    <!-- 标题开始 -->
+                    <div class="titleBox">
+                      <a href="javascript:;" class="titleLink">
+                        <h5 class="titleh5">{{ r.title }}</h5>
+                      </a>
+                    </div>
+                    <div class="newToolBox hidden-style1">
+                      <i class="fa fa-clock-o"></i>
+                      发布时间：{{ r.addtime }}
+                    </div>
+                    <!-- 标题结束 -->
+                    <!-- 概要开始 -->
+                    <div class="gyBox">
+                      <article
+                        class="lsitSummary"
+                        [innerHTML]="r.content"
+                      ></article>
+                    </div>
+                    <!-- 概要结束 -->
+                  </div>
+                  <!-- 标题概述结束 -->
+                </div>
+              </div>
+            </div>
+            <!-- 咨询容器结束 -->
+          </div>
 
           <div class="e-pages" style="margin-top: 10px; text-align: center">
             <nz-pagination

@@ -2,6 +2,7 @@ import { Component, type OnInit } from '@angular/core';
 import { ApiService } from '../../../core/services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -20,7 +21,7 @@ export class NoteListComponent implements OnInit {
     category: '',
   };
 
-  lists = [];
+  lists: any = [];
   totalCount = 0;
 
   nodes = [
@@ -45,12 +46,12 @@ export class NoteListComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private message: NzMessageService,
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.loadList(1);
-    this.loadNode();
 
     this.validateForm = this.fb.group({
       title: ['', []],
@@ -64,21 +65,20 @@ export class NoteListComponent implements OnInit {
     this.loading = true;
     this.search.current = page;
 
-    this.apiService.get('/book/page', { params: this.search }).subscribe(
-      (res: any) => {
-        this.loading = false;
-        console.log(`res ->:`, res);
-        if (res.code == 0) {
-          var data = res.data;
-          this.lists = data.lists.records;
-          this.totalCount = data.lists.total;
+    this.apiService
+      .get('/api/public/announcements', { params: this.search })
+      .subscribe(
+        (res: any) => {
+          this.loading = false;
+          var data = res;
+          this.lists = data.list || [];
+          this.totalCount = data.total || 0;
+        },
+        (err) => {
+          this.loading = false;
+          this.message.error(err.message);
         }
-      },
-      (err) => {
-        this.loading = false;
-        this.message.error(err.message);
-      }
-    );
+      );
   };
 
   searchSubmit = () => {
@@ -121,5 +121,9 @@ export class NoteListComponent implements OnInit {
         children: item.children ? this.convertToTree(item.children) : [],
       };
     });
+  };
+
+  gotoDetail = (id: any) => {
+    this.router.navigate(['/note-detail', id]);
   };
 }

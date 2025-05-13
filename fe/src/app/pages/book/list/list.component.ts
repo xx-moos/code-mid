@@ -2,7 +2,8 @@ import { Component, type OnInit } from '@angular/core';
 import { ApiService } from '../../../core/services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
-import type { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
+import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -21,7 +22,7 @@ export class ListComponent implements OnInit {
     category: '',
   };
 
-  lists = [];
+  lists: any = [];
   totalCount = 0;
 
   nodes = [
@@ -39,6 +40,8 @@ export class ListComponent implements OnInit {
   loadNode(): any {
     this.apiService.get('/categories/list').subscribe((res: any) => {
       console.log(`res ->:`, res);
+      this.nodes = this.convertToTree(res.data);
+      console.log(`this.nodes ->:`, this.nodes);
     });
     return [];
   }
@@ -46,7 +49,8 @@ export class ListComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private message: NzMessageService,
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -69,11 +73,9 @@ export class ListComponent implements OnInit {
       (res: any) => {
         this.loading = false;
         console.log(`res ->:`, res);
-        if (res.code == 0) {
-          var data = res.data;
-          this.lists = data.lists.records;
-          this.totalCount = data.lists.total;
-        }
+        var data = res.data;
+        this.lists = data.records || [];
+        this.totalCount = data.total || 0;
       },
       (err) => {
         this.loading = false;
@@ -112,15 +114,50 @@ export class ListComponent implements OnInit {
     // });
   };
 
-  // 把扁平的树结构转换为树结构
-  convertToTree = (data: any[]): any[] => {
-    return data.map((item: any) => {
-      return {
-        title: item.categoryName,
-        key: item.categoryId,
-        isLeaf: item.children.length === 0,
-        children: item.children ? this.convertToTree(item.children) : [],
-      };
-    });
+  // 递归把扁平的树结构转换为树结构
+  convertToTree = (data: any[], options?: any): any[] => {
+    const {
+      idKey = 'id',
+      parentIdKey = 'parentId',
+      childrenKey = 'children',
+      rootParentId = null, // 默认根节点的 parentId 是 null
+    } = options || {};
+
+    // 创建一个副本进行操作，避免修改原始数组中的对象
+    const list = data.map((item: any) => ({ ...item }));
+    function buildTreeRecursive(currentParentId: any): any {
+      const children: any[] = [];
+      for (let i = 0; i < list.length; i++) {
+        const item = list[i];
+
+        if (item[parentIdKey] === currentParentId) {
+          // 找到一个子节点
+          // 从列表中移除该节点，以减少后续迭代的搜索范围 (可选优化，但要注意副作用)
+          // const [foundItem] = list.splice(i, 1);
+          // i--; // 因为 splice 会改变数组长度和索引
+          // 或者不修改 list，直接使用 item
+          const node: any = {
+            ...item,
+            title: item.name,
+            key: item.code,
+          };
+          // 递归查找当前节点的子节点
+          const grandChildren = buildTreeRecursive(node[idKey]);
+          if (grandChildren.length > 0) {
+            node[childrenKey] = grandChildren;
+            node.isLeaf = false;
+          } else {
+            node.isLeaf = true;
+          }
+          children.push(node);
+        }
+      }
+      return children;
+    }
+    return buildTreeRecursive(rootParentId);
+  };
+
+  gotoDetail = (id: any) => {
+    this.router.navigate(['/book-detail', id]);
   };
 }

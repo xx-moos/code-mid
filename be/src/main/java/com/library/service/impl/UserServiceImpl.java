@@ -25,6 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 用户服务实现类
@@ -194,5 +197,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .eq(status != null, User::getStatus, status)
                 .eq(User::getDeleted, Constants.NOT_DELETED)
                 .orderByDesc(User::getCreateTime));
+    }
+    
+    @Override
+    public List<User> listUsersByIds(Collection<Long> userIds) {
+        if (userIds == null || userIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        
+        // 使用MyBatis-Plus提供的listByIds方法，并过滤未删除的用户
+        List<User> users = listByIds(userIds);
+        
+        // 过滤已删除的用户
+        return users;
     }
 }

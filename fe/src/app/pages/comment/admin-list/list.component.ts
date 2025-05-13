@@ -19,7 +19,7 @@ export class CommentAdminListComponent implements OnInit {
   search = {
     current: 1,
     size: 10,
-    title: '',
+    bookId: '',
   };
 
   lists: any = [];
@@ -44,7 +44,7 @@ export class CommentAdminListComponent implements OnInit {
     this.search.current = page;
 
     this.apiService
-      .get('/api/admin/announcements', { params: this.search })
+      .get('/api/book-comment/page', { params: this.search })
       .subscribe(
         (res: any) => {
           this.loading = false;
@@ -67,16 +67,22 @@ export class CommentAdminListComponent implements OnInit {
     this.loadList(size);
   };
 
-  auditItem = (ids: any) => {
-    this.apiService.delete('/api/admin/announcements/' + ids).subscribe(
-      (res: any) => {
-        this.message.success('删除成功');
-        this.loadList(1);
-      },
-      (err) => {
-        this.message.error(err.message);
-      }
-    );
+  auditItem = (ids: any, status: number) => {
+    this.apiService
+      .get('/api/book-comment/audit/' + ids, {
+        params: {
+          status: status,
+        },
+      })
+      .subscribe(
+        (res: any) => {
+          this.message.success('成功');
+          this.loadList(1);
+        },
+        (err) => {
+          this.message.error(err.message);
+        }
+      );
   };
 
   addItem = () => {
