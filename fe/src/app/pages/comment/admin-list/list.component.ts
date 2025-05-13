@@ -67,7 +67,7 @@ export class CommentAdminListComponent implements OnInit {
     this.loadList(size);
   };
 
-  deleteItem = (ids: any) => {
+  auditItem = (ids: any) => {
     this.apiService.delete('/api/admin/announcements/' + ids).subscribe(
       (res: any) => {
         this.message.success('删除成功');
