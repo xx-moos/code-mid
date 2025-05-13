@@ -31,61 +31,60 @@ import javax.validation.Valid;
 @RequestMapping("/book")
 public class BookController {
 
-    @Resource
-    private BookService bookService;
+  @Resource
+  private BookService bookService;
 
-    @ApiOperation("分页查询图书")
-    @GetMapping("/page")
-    public Result<Page<Book>> page(
-            @ApiParam("页码") @RequestParam(defaultValue = "1") Integer current,
-            @ApiParam("每页条数") @RequestParam(defaultValue = "10") Integer size,
-            @ApiParam("图书名称") @RequestParam(required = false) String name,
-            @ApiParam("作者") @RequestParam(required = false) String author,
-            @ApiParam("分类") @RequestParam(required = false) String category
-    ) {
-        Page<Book> page = bookService.pageBooks(new Page<>(current, size), name, author, category);
-        return Result.success(page);
-    }
+  @ApiOperation("分页查询图书")
+  @GetMapping("/page")
+  public Result<Page<Book>> page(
+      @ApiParam("页码") @RequestParam(defaultValue = "1") Integer current,
+      @ApiParam("每页条数") @RequestParam(defaultValue = "10") Integer size,
+      @ApiParam("图书名称") @RequestParam(required = false) String name,
+      @ApiParam("作者") @RequestParam(required = false) String author,
+      @ApiParam("分类") @RequestParam(required = false) String category) {
+    Page<Book> page = bookService.pageBooks(new Page<>(current, size), name, author, category);
+    return Result.success(page);
+  }
 
-    @ApiOperation("根据ID查询图书")
-    @GetMapping("/{id}")
-    public Result<Book> getById(@PathVariable Long id) {
-        Book book = bookService.getById(id);
-        return book != null ? Result.success(book) : Result.failed("图书不存在");
-    }
+  @ApiOperation("根据ID查询图书")
+  @GetMapping("/{id}")
+  public Result<Book> getById(@PathVariable Long id) {
+    Book book = bookService.getById(id);
+    return book != null ? Result.success(book) : Result.failed("图书不存在");
+  }
 
-    @ApiOperation("新增图书")
-    @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public Result<Void> save(@Valid @RequestBody Book book) {
-        boolean result = bookService.save(book);
-        return result ? Result.success() : Result.failed("新增图书失败");
-    }
+  @ApiOperation("新增图书")
+  @PostMapping
+  @PreAuthorize("hasRole('ADMIN')")
+  public Result<Void> save(@Valid @RequestBody Book book) {
+    boolean result = bookService.save(book);
+    return result ? Result.success() : Result.failed("新增图书失败");
+  }
 
-    @ApiOperation("修改图书")
-    @PutMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public Result<Void> update(@Valid @RequestBody Book book) {
-        boolean result = bookService.updateById(book);
-        return result ? Result.success() : Result.failed("修改图书失败");
-    }
+  @ApiOperation("修改图书")
+  @PutMapping
+  @PreAuthorize("hasRole('ADMIN')")
+  public Result<Void> update(@Valid @RequestBody Book book) {
+    boolean result = bookService.updateById(book);
+    return result ? Result.success() : Result.failed("修改图书失败");
+  }
 
-    @ApiOperation("删除图书")
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public Result<Void> delete(@PathVariable Long id) {
-        boolean result = bookService.removeById(id);
-        return result ? Result.success() : Result.failed("删除图书失败");
-    }
+  @ApiOperation("删除图书")
+  @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public Result<Void> delete(@PathVariable Long id) {
+    boolean result = bookService.removeById(id);
+    return result ? Result.success() : Result.failed("删除图书失败");
+  }
 
-    @ApiOperation("更新图书库存")
-    @PutMapping("/stock/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public Result<Void> updateStock(
-            @ApiParam("图书ID") @PathVariable Long id,
-            @ApiParam("库存变化量（正数增加，负数减少）") @RequestParam Integer stock
-    ) {
-        boolean result = bookService.updateStock(id, stock);
-        return result ? Result.success() : Result.failed("更新库存失败");
-    }
-} 
+  @ApiOperation("更新图书库存")
+  @PutMapping("/stock/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public Result<Void> updateStock(
+      @ApiParam("图书ID") @PathVariable Long id,
+      @ApiParam("库存变化量（正数增加，负数减少）") @RequestParam Integer stock) {
+    boolean result = bookService.updateStock(id, stock);
+    return result ? Result.success() : Result.failed("更新库存失败");
+  }
+
+}

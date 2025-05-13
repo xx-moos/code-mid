@@ -10,7 +10,7 @@ spring:
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.75.129:3306/smart_library?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.8.129:3306/smart_library?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
     hikari:
@@ -23,7 +23,7 @@ spring:
 
   # Redis配置
   redis:
-    host: 192.168.75.129
+    host: 192.168.8.129
     port: 6379
     database: 0
     timeout: 10000

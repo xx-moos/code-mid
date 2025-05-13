@@ -1,18 +1,22 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpParams,
+  HttpHeaders,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
-
   // 未来可以考虑将 baseUrl 提取到环境配置中
   // import { environment } from 'src/environments/environment';
   // private baseUrl = environment.apiUrl;
   private baseUrl = 'http://localhost:8080/bapi';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * 发送 GET 请求
@@ -21,17 +25,35 @@ export class ApiService {
    * @param options 可选的请求配置 (HttpParams, HttpHeaders 等)
    * @returns Observable<T> 响应数据的 Observable
    */
-  get<T>(endpoint: string, options?: {
-    params?: HttpParams | { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> };
-    headers?: HttpHeaders | { [header: string]: string | string[] };
-    observe?: 'body';
-    responseType?: 'json';
-  }): Observable<T> {
+  get<T>(
+    endpoint: string,
+    options?: {
+      params?:
+        | HttpParams
+        | {
+            [param: string]:
+              | string
+              | number
+              | boolean
+              | ReadonlyArray<string | number | boolean>;
+          };
+      headers?: HttpHeaders | { [header: string]: string | string[] };
+      observe?: 'body';
+      responseType?: 'json';
+    }
+  ): Observable<T> {
     // const url = `${this.baseUrl}/${endpoint}`; // 启用 baseUrl 时的写法
     const url = `${this.baseUrl}${endpoint}`; // 暂时不使用 baseUrl
-    return this.http.get<T>(url, options).pipe(
-      catchError(this.handleError)
-    );
+    const token = localStorage.getItem('token');
+
+    const feature = {
+      ...options,
+      headers: new HttpHeaders({
+        Authorization: token ? `Bearer ${token}` : '',
+      }),
+    };
+
+    return this.http.get<T>(url, feature).pipe(catchError(this.handleError));
   }
 
   /**
@@ -42,17 +64,37 @@ export class ApiService {
    * @param options 可选的请求配置 (HttpParams, HttpHeaders 等)
    * @returns Observable<T> 响应数据的 Observable
    */
-  post<T>(endpoint: string, body: any | null, options?: {
-    params?: HttpParams | { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> };
-    headers?: HttpHeaders | { [header: string]: string | string[] };
-    observe?: 'body';
-    responseType?: 'json';
-  }): Observable<T> {
+  post<T>(
+    endpoint: string,
+    body: any | null,
+    options?: {
+      params?:
+        | HttpParams
+        | {
+            [param: string]:
+              | string
+              | number
+              | boolean
+              | ReadonlyArray<string | number | boolean>;
+          };
+      headers?: HttpHeaders | { [header: string]: string | string[] };
+      observe?: 'body';
+      responseType?: 'json';
+    }
+  ): Observable<T> {
     // const url = `${this.baseUrl}/${endpoint}`; // 启用 baseUrl 时的写法
     const url = `${this.baseUrl}${endpoint}`; // 暂时不使用 baseUrl
-    return this.http.post<T>(url, body, options).pipe(
-      catchError(this.handleError)
-    );
+    const token = localStorage.getItem('token');
+
+    const feature = {
+      ...options,
+      headers: new HttpHeaders({
+        Authorization: token ? `Bearer ${token}` : '',
+      }),
+    };
+    return this.http
+      .post<T>(url, body, feature)
+      .pipe(catchError(this.handleError));
   }
 
   /**
@@ -69,10 +111,13 @@ export class ApiService {
       // 响应体可能包含错误原因的详细信息
       console.error(
         `后端返回错误代码 ${error.status}, ` +
-        `错误详情: ${JSON.stringify(error.error)}`);
+          `错误详情: ${JSON.stringify(error.error)}`
+      );
     }
     // 返回一个对调用者友好的错误信息
     // 在实际应用中，这里可能需要更复杂的错误转换和用户通知逻辑
-    return throwError(() => new Error('请求处理失败，请稍后再试或联系技术支持。'));
+    return throwError(
+      () => new Error('请求处理失败，请稍后再试或联系技术支持。')
+    );
   }
 }

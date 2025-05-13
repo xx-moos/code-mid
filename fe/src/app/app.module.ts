@@ -23,16 +23,28 @@ import { CarouselComponent } from './shared/components/carousel/carousel.compone
 import { CommonHeaderComponent } from './shared/components/common-header/common-header.component';
 import { CommonFooterComponent } from './shared/components/common-footer/common-footer.component';
 import { EContainerComponent } from './shared/components/e-container/e-container.component';
+import { ListComponent } from './pages/book/list/list.component';
+import { NoteListComponent } from './pages/note/list/list.component';
+
+
 
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzImageModule } from 'ng-zorro-antd/image';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
-
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzTreeModule } from 'ng-zorro-antd/tree';
 
 import { AuthService } from './core/services/auth.service';
 import { AuthGuard } from './core/guards/auth.guard';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 registerLocaleData(zh);
 
@@ -47,9 +59,12 @@ registerLocaleData(zh);
     CarouselComponent,
     CommonHeaderComponent,
     CommonFooterComponent,
-    EContainerComponent
+    EContainerComponent,
+    ListComponent,
+    NoteListComponent
   ],
   imports: [
+    ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
@@ -62,7 +77,14 @@ registerLocaleData(zh);
     NzButtonModule,
     NzGridModule,
     NzImageModule,
-    NzRadioModule
+    NzRadioModule,
+    NzCardModule,
+    NzFormModule,
+    NzMessageModule,
+    NzTableModule,
+    NzPaginationModule,
+    NzInputModule,
+    NzTreeModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: zh_CN },

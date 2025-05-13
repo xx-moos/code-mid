@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm/index.js';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-
   gonggaoxinxilist: any[] = [];
 
   tushuxinxilist: any[] = [];
 
   tushuxinxilist1: any[] = [];
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     console.log('Home component loaded');
@@ -46,7 +45,4 @@ export class HomeComponent implements OnInit {
     //   this.tushuxinxilist1 = res;
     // });
   }
-  
-
-
-} 
+}

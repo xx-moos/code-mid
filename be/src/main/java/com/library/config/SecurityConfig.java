@@ -5,6 +5,7 @@ import com.library.security.MD5PasswordEncoder;
 import com.library.security.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,6 +15,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.Arrays;
 
 import javax.annotation.Resource;
 
@@ -58,11 +63,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   /**
+   * CORS配置
+   */
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+      CorsConfiguration configuration = new CorsConfiguration();
+      // 允许所有来源，生产环境应配置具体来源
+      configuration.setAllowedOrigins(Arrays.asList("*")); // 兼容旧版Spring，使用 setAllowedOrigins
+      configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+      configuration.setAllowedHeaders(Arrays.asList("*"));
+      configuration.setAllowCredentials(true);
+      configuration.setMaxAge(3600L); // 预检请求的有效期，单位秒
+
+      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+      source.registerCorsConfiguration("/**", configuration); // 对所有接口生效
+      return source;
+  }
+
+  /**
    * Http安全配置
    */
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
+        // 启用CORS
+        .cors()
+        .and() // 添加 .and() 以连接后续配置
         // 关闭CSRF
         .csrf().disable()
         // 不通过Session获取SecurityContext
@@ -72,6 +98,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         // 登录、注册、验证码等接口允许匿名访问
         .antMatchers("/auth/**").permitAll()
+        .antMatchers("/categories/**").permitAll()
+        .antMatchers(HttpMethod.GET, "/book/**").permitAll()
         // Swagger相关接口允许匿名访问
         .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/webjars/**")
         .permitAll()

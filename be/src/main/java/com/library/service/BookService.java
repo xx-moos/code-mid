@@ -1,5 +1,7 @@
 package com.library.service;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.library.entity.Book;
@@ -27,4 +29,5 @@ public interface BookService extends IService<Book> {
      * @return 是否成功
      */
     boolean updateStock(Long id, Integer stock);
+
 } 
