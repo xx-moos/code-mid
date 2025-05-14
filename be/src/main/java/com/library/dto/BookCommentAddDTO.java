@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiModelProperty;
 public class BookCommentAddDTO {
 
     @ApiModelProperty(value = "图书ID", required = true)
-    @NotNull(message = "图书ID不能为空")
     private Long bookId;
 
     @ApiModelProperty(value = "评论内容", required = true)
@@ -20,4 +19,7 @@ public class BookCommentAddDTO {
 
     @ApiModelProperty(value = "父评论ID，如果是回复则填写")
     private Long parentId;
-} 
+
+    @ApiModelProperty(value = "星级", required = true)
+    private String star;
+}

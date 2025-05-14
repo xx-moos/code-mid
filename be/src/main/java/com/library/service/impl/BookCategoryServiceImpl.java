@@ -217,4 +217,13 @@ public class BookCategoryServiceImpl implements IBookCategoryService {
 
     return voPage;
   }
+
+
+  @Override
+  public String getCategoryName(String categoryCode) {
+    LambdaQueryWrapper<BookCategory> wrapper = new LambdaQueryWrapper<>();
+    wrapper.eq(BookCategory::getCode, categoryCode);
+    BookCategory category = bookCategoryMapper.selectOne(wrapper);
+    return category != null ? category.getName() : null;
+  }
 }

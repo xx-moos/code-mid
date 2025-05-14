@@ -1,0 +1,68 @@
+<div class="views-tushuxinxi-list">
+  <div>
+    <app-e-container>
+      <div class="">
+        <div class="goods-info clearfix">
+          <div class="gallery-list">
+            <app-banner [fileList]="map.cover"></app-banner>
+          </div>
+          <div class="goods-right-content">
+            <h3 class="title">{{ map.name }}</h3>
+            <div class="descount">
+              <div>
+                <span class="name"> 图书号： </span>
+                <span class="val"> {{ map.isbn }} </span>
+              </div>
+              <div>
+                <span class="name"> 图书类别： </span>
+                <span class="val">{{ map.categoryName }} </span>
+              </div>
+              <!-- <div>
+                <span class="name"> 借阅金额： </span>
+                <span class="val"> {{ map.jieyuejine }} </span>
+              </div> -->
+              <div>
+                <span class="name"> 图书库存： </span>
+                <span class="val"> {{ map.stock }} </span>
+              </div>
+              <div>
+                <span class="name"> ISBN号： </span>
+                <span class="val"> {{ map.isbn }} </span>
+              </div>
+              <div>
+                <span class="name"> 作者： </span>
+                <span class="val"> {{ map.author }} </span>
+              </div>
+              <div>
+                <span class="name"> 出版社： </span>
+                <span class="val"> {{ map.publisher }} </span>
+              </div>
+              <div>
+                <span class="name"> 借阅次数： </span>
+                <span class="val"> {{ map.borrowCount }} </span>
+              </div>
+            </div>
+
+            <button nz-button nzType="primary" (click)="borrowBook(map.id)">
+              图书借阅
+            </button>
+          </div>
+        </div>
+        <div class="goods-content"></div>
+      </div>
+    </app-e-container>
+  </div>
+
+  <app-e-container>
+    <nz-tabset type="border-card">
+      <nz-tab nzTitle="图书简介">
+        <div style="text-indent: 4em">
+          {{ map.description }}
+        </div>
+      </nz-tab>
+      <nz-tab nzTitle="评论区">
+        <app-comment></app-comment>
+      </nz-tab>
+    </nz-tabset>
+  </app-e-container>
+</div>

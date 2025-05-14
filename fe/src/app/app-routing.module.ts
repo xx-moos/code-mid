@@ -17,7 +17,7 @@ import { BookEditComponent } from './pages/book/admin-edit/edit.component';
 import { BookListComponent } from './pages/book/admin-list/list.component';
 import { BorrowListComponent } from './pages/borrow/list/list.component';
 import { CommentAdminListComponent } from './pages/comment/admin-list/list.component';
-
+import { BookInfoComponent } from './pages/book/info/info.component';
 import { CategoryListComponent } from './pages/category/list/list.component';
 
 const routes: Routes = [
@@ -32,21 +32,19 @@ const routes: Routes = [
       // 默认展示首页 (对所有用户可见)
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'book-list', component: ListComponent },
+      { path: 'book-info', component: BookInfoComponent },
       { path: 'note-list', component: NoteListComponent },
       { path: 'user-edit', component: UserEditComponent },
-
-      // ... 其他需要主布局的公共页面路由可以放在这里
     ],
   },
   // 读者区域路由 (需要登录)
   {
     path: 'reader',
-    // canActivate: [AuthGuard], // 使用认证守卫
-    // 可以在这里添加 canActivateChild 守卫进行更细粒度的控制
+    canActivate: [AuthGuard], // 使用认证守卫
+    component: ReaderDashboardComponent,
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // 默认重定向到仪表盘
-      // { path: 'dashboard', component: ReaderDashboardComponent },
-      // ... 其他读者页面路由
+      { path: '', redirectTo: 'borrow-list', pathMatch: 'full' }, // 默认重定向到仪表盘
+      { path: 'borrow-list', component: BorrowListComponent },
     ],
   },
   // 管理员区域路由 (需要登录和角色验证 - 在 AuthGuard 中实现或使用 RoleGuard)

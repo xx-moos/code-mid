@@ -3,15 +3,19 @@ import { ApiService } from '../../../core/services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-list',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss'],
+  selector: 'app-book-info',
+  templateUrl: './info.component.html',
+  styleUrls: ['./info.component.scss'],
 })
-export class ListComponent implements OnInit {
+export class BookInfoComponent implements OnInit {
   validateForm!: UntypedFormGroup;
+
+  id: any;
+
+  map: any = {};
 
   loading = false;
 
@@ -22,40 +26,17 @@ export class ListComponent implements OnInit {
     category: '',
   };
 
-  lists: any = [];
-  totalCount = 0;
-
-  nodes = [
-    { title: 'Expand to load', key: '0' },
-    { title: 'Expand to load', key: '1' },
-    { title: 'Tree Node', key: '2', isLeaf: true },
-  ];
-
-  nzEvent(event: any): void {
-    console.log(`event ->:`, event);
-    this.search.category = event.node.key;
-    this.loadList(1);
-  }
-
-  loadNode(): any {
-    this.apiService.get('/categories/list').subscribe((res: any) => {
-      console.log(`res ->:`, res);
-      this.nodes = this.convertToTree(res.data);
-      console.log(`this.nodes ->:`, this.nodes);
-    });
-    return [];
-  }
-
   constructor(
     private apiService: ApiService,
     private message: NzMessageService,
     private fb: UntypedFormBuilder,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.loadList(1);
-    this.loadNode();
+    this.id = this.route.snapshot.queryParams['id'];
+    this.loadList();
 
     this.validateForm = this.fb.group({
       title: ['', []],
@@ -63,19 +44,19 @@ export class ListComponent implements OnInit {
     });
   }
 
-  loadList = (page: number) => {
+  loadList = () => {
     // 加载
     if (this.loading) return;
     this.loading = true;
-    this.search.current = page;
 
-    this.apiService.get('/book/page', { params: this.search }).subscribe(
+    this.apiService.get('/book/' + this.id).subscribe(
       (res: any) => {
         this.loading = false;
         console.log(`res ->:`, res);
-        var data = res.data;
-        this.lists = data.records || [];
-        this.totalCount = data.total || 0;
+        this.map = res.data;
+        this.map.cover = this.map.cover
+          ? `http://localhost:8080${this.map.cover}`.split(',')
+          : [];
       },
       (err) => {
         this.loading = false;
@@ -85,13 +66,13 @@ export class ListComponent implements OnInit {
   };
 
   searchSubmit = () => {
-    this.loadList(1);
+    this.loadList();
   };
 
   sizeChange = (size: number) => {
     console.log(`size ->:`, size);
     this.search.size = size;
-    this.loadList(1);
+    this.loadList();
   };
 
   deleteItems = (ids: any) => {
@@ -158,6 +139,10 @@ export class ListComponent implements OnInit {
   };
 
   gotoDetail = (id: any) => {
-    this.router.navigate(['/book-info'], { queryParams: { id } });
+    this.router.navigate(['/book-detail', id]);
+  };
+
+  borrowBook = (id: any) => {
+    this.router.navigate(['/book-borrow', id]);
   };
 }

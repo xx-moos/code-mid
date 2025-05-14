@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
           if (response.data?.user?.role == 1) {
             this.router.navigateByUrl('/admin/user-list?type=admin');
           } else {
-            this.router.navigateByUrl('/reader/dashboard');
+            this.router.navigateByUrl('/reader/borrow-list');
           }
         },
         error: (error) => {

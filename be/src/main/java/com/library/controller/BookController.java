@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.library.common.Result;
 import com.library.entity.Book;
 import com.library.service.BookService;
+import com.library.service.IBookCategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -34,6 +35,9 @@ public class BookController {
   @Resource
   private BookService bookService;
 
+  @Resource
+  private IBookCategoryService bookCategoryService;
+
   @ApiOperation("分页查询图书")
   @GetMapping("/page")
   public Result<Page<Book>> page(
@@ -48,8 +52,11 @@ public class BookController {
 
   @ApiOperation("根据ID查询图书")
   @GetMapping("/{id}")
-  public Result<Book> getById(@PathVariable Long id) {
+  public Result<Object> getById(@PathVariable Long id) {
     Book book = bookService.getById(id);
+    if (book != null) {
+      book.setCategoryName(bookCategoryService.getCategoryName(book.getCategory()));
+    }
     return book != null ? Result.success(book) : Result.failed("图书不存在");
   }
 

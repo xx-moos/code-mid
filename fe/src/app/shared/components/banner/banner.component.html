@@ -1,0 +1,35 @@
+<div class="thumb-example">
+  <swiper
+    [spaceBetween]="10"
+    [navigation]="true"
+    [thumbs]="{ swiper: thumbsSwiper }"
+    class="top-swiper"
+  >
+    <ng-template
+      swiperSlide
+      class="slide"
+      *ngFor="let imageUrl of fileList; let index = index"
+    >
+      <img [src]="imageUrl" class="img-cover" alt="Image" />
+    </ng-template>
+  </swiper>
+
+  <swiper
+    class="thumbs-swiper"
+    (swiper)="setThumbsSwiper($event)"
+    [spaceBetween]="10"
+    [slidesPerView]="4"
+    [watchSlidesProgress]="true"
+    [preventClicks]="false"
+    [preventClicksPropagation]="false"
+  >
+    <!-- 动态渲染缩略图幻灯片，遍历 fileList 数组 -->
+    <ng-template
+      swiperSlide
+      class="slide"
+      *ngFor="let imageUrl of fileList; let index = index"
+    >
+      <img [src]="imageUrl" alt="Image" />
+    </ng-template>
+  </swiper>
+</div>

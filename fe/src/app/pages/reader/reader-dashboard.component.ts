@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./reader-dashboard.component.scss']
 })
 export class ReaderDashboardComponent implements OnInit {
+  isCollapsed = false;
 
   constructor() { }
 

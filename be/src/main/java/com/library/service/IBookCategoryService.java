@@ -64,4 +64,6 @@ public interface IBookCategoryService {
      * @return 是否删除成功
      */
     boolean deleteCategory(Long id);
+
+    String getCategoryName(String category);
 } 

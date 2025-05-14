@@ -53,6 +53,13 @@ public class Book extends BaseEntity {
 
 
     /**
+     * 分类名称
+     */
+    @TableField(exist = false)
+    private String categoryName;
+
+  
+    /**
      * 库存数量
      */
     @TableField("stock")
@@ -89,4 +96,6 @@ public class Book extends BaseEntity {
      */
     @TableField("avg_rating")
     private Double avgRating;
+
+
 } 

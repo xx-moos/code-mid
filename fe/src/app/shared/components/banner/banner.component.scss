@@ -1,0 +1,43 @@
+.thumb-example {
+  height: 400px;
+}
+
+.top-swiper,
+.thumbs-swiper {
+  .slide {
+    width: 100%;
+    height: 100%;
+  }
+  .img-cover {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+  }
+}
+.sile-viewer {
+  img {
+    position: absolute;
+  }
+}
+
+.top-swiper {
+  height: 80%;
+  width: 100%;
+}
+
+.thumbs-swiper {
+  height: 20%;
+  box-sizing: border-box;
+
+  .slide {
+    width: 25%;
+    height: 100%;
+    opacity: 1;
+    border: 1px solid #fff;
+    &:not(.swiper-slide-thumb-active) {
+      opacity: 0.8;
+      border: none;
+    }
+  }
+}

@@ -46,4 +46,11 @@ public class BookCommentVO {
 
     @ApiModelProperty(value = "子评论列表")
     private List<BookCommentVO> children;
+
+    @ApiModelProperty(value = "星星数量")
+    private String star;
+
+    @ApiModelProperty(value = "状态")
+    private Integer status;
+
 } 

@@ -51,4 +51,10 @@ public class BookComment extends BaseEntity {
     @TableField("status")
     private Integer status;
 
+    /**
+     * 星级
+     */
+    @TableField("star")
+    private String star;
+
 } 

@@ -37,10 +37,10 @@ import { NoteAdminListComponent } from './pages/note/admin-list/list.component';
 import { NoteAdminEditComponent } from './pages/note/admin-edit/edit.component';
 import { CommentAdminListComponent } from './pages/comment/admin-list/list.component';
 import { CommentAdminEditComponent } from './pages/comment/admin-edit/edit.component';
+import { BookInfoComponent } from './pages/book/info/info.component';
 
-
-
-
+import { BannerComponent } from './shared/components/banner/banner.component';
+import { CommentComponent } from './shared/components/comment/comment.component';
 
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -60,10 +60,14 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzRateModule } from 'ng-zorro-antd/rate';
 
 import { AuthService } from './core/services/auth.service';
 import { AuthGuard } from './core/guards/auth.guard';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SwiperModule } from 'swiper/angular';
+
 registerLocaleData(zh);
 
 @NgModule({
@@ -86,6 +90,7 @@ registerLocaleData(zh);
 
     BookListComponent,
     BookEditComponent,
+    BookInfoComponent,
 
     CategoryListComponent,
     CategoryEditComponent,
@@ -98,6 +103,9 @@ registerLocaleData(zh);
 
     CommentAdminListComponent,
     CommentAdminEditComponent,
+
+    BannerComponent,
+    CommentComponent,
   ],
   imports: [
     ReactiveFormsModule,
@@ -127,6 +135,9 @@ registerLocaleData(zh);
     NzModalModule,
     NzPopconfirmModule,
     NzDatePickerModule,
+    NzTabsModule,
+    NzRateModule,
+    SwiperModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }, AuthService, AuthGuard],
   bootstrap: [AppComponent],

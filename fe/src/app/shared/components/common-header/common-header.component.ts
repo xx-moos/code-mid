@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./common-header.component.scss'],
 })
 export class CommonHeaderComponent {
+  userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+
   constructor(private router: Router) {
     this.isShowLogin = false;
   }
@@ -40,6 +42,7 @@ export class CommonHeaderComponent {
   }
 
   logout() {
-    this.isShowLogin = false;
+    localStorage.clear();
+    this.router.navigate(['/login']);
   }
 }

@@ -1,0 +1,49 @@
+<div class="comment-form">
+  <form nz-form [formGroup]="validateForm">
+    <nz-form-item>
+      <nz-form-label nzRequired>评分</nz-form-label>
+      <nz-form-control nzErrorTip="请评分">
+        <nz-rate formControlName="star"></nz-rate>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>评论内容</nz-form-label>
+      <nz-form-control nzErrorTip="请输入评论内容">
+        <textarea nz-input formControlName="content"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control>
+        <button nz-button nzType="primary" (click)="submitComment()">
+          发布评论
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+  <div style="margin-top: 10px">
+    <div class="comment" *ngFor="let v of lists">
+      <div class="common-avatar J_User">
+        <img
+          [src]="'http://localhost:8080' + v.userAvatar"
+          width="100%"
+          height="100%"
+        />
+      </div>
+      <div class="comment-block">
+        <p class="comment-user">
+          <span class="comment-username J_User"> {{ v.username }} </span>
+          <span>
+            <nz-rate [ngModel]="v.star" nzDisabled></nz-rate>
+          </span>
+          <span class="comment-time">{{ v.createTime }}</span>
+          &nbsp;
+          <span>回复</span>
+        </p>
+        <div class="comment-content J_CommentContent">{{ v.content }}</div>
+      </div>
+    </div>
+  </div>
+</div>
