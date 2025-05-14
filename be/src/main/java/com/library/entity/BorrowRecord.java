@@ -57,6 +57,13 @@ public class BorrowRecord extends BaseEntity {
     private Integer status;
 
     /**
+     * 还书时评分(1-5)
+     * SQL: `rating` tinyint NULL DEFAULT NULL COMMENT '还书时评分(1-5)'
+     */
+    @TableField("rating")
+    private Integer rating;
+
+    /**
      * 备注
      */
     @TableField("remark")

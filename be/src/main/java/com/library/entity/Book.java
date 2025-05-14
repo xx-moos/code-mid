@@ -71,14 +71,22 @@ public class Book extends BaseEntity {
     private String cover;
 
     /**
-     * 状态（0-下架，1-上架）
+     * 状态（0-下架，1-上架） -> SQL中是 0-可借，1-已下架。注释与SQL定义保持一致
+     * 根据 SQL: `status` tinyint NOT NULL DEFAULT 0 COMMENT '状态：0-可借，1-已下架'
      */
     @TableField("status")
-    private Integer status;
+    private Integer status; //  tinyint 对应 Integer 或 Short 都可以，Integer更常用
 
     /**
      * 借阅次数
      */
     @TableField("borrow_count")
     private Integer borrowCount;
+
+    /**
+     * 综合评分(0-10)
+     * 对应数据库 DECIMAL(3,1)
+     */
+    @TableField("avg_rating")
+    private Double avgRating;
 } 

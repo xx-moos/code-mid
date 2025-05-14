@@ -2,6 +2,7 @@ package com.library.config;
 
 import com.library.security.JwtAuthenticationTokenFilter;
 import com.library.security.MD5PasswordEncoder;
+import com.library.security.SecurityPathMatcher;
 import com.library.security.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 import java.util.Arrays;
 
 import javax.annotation.Resource;
@@ -35,6 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Resource
   private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+  
+  @Resource
+  private SecurityPathMatcher securityPathMatcher;
 
   /**
    * 认证管理器
@@ -67,17 +73,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
    */
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
-      CorsConfiguration configuration = new CorsConfiguration();
-      // 允许所有来源，生产环境应配置具体来源
-      configuration.setAllowedOrigins(Arrays.asList("*")); // 兼容旧版Spring，使用 setAllowedOrigins
-      configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-      configuration.setAllowedHeaders(Arrays.asList("*"));
-      configuration.setAllowCredentials(true);
-      configuration.setMaxAge(3600L); // 预检请求的有效期，单位秒
+    CorsConfiguration configuration = new CorsConfiguration();
+    // 允许所有来源，生产环境应配置具体来源
+    configuration.setAllowedOrigins(Arrays.asList("*")); // 兼容旧版Spring，使用 setAllowedOrigins
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+    configuration.setAllowedHeaders(Arrays.asList("*"));
+    configuration.setAllowCredentials(true);
+    configuration.setMaxAge(3600L); // 预检请求的有效期，单位秒
 
-      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-      source.registerCorsConfiguration("/**", configuration); // 对所有接口生效
-      return source;
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration); // 对所有接口生效
+    return source;
+  }
+
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring().antMatchers("/auth/**", "/categories/**", "/book/**", "/api/public/announcements/**", "/upload/**");
+    
+    // 配置SecurityPathMatcher中的匿名路径
+    securityPathMatcher.addAnonymousPath("/auth/**");
+    securityPathMatcher.addAnonymousPath("/categories/**");
+    securityPathMatcher.addAnonymousPath("/book/**", "GET");
+    securityPathMatcher.addAnonymousPath("/api/public/announcements/**");
+    securityPathMatcher.addAnonymousPath("/upload/**");
+    securityPathMatcher.addAnonymousPath("/swagger-ui.html");
+    securityPathMatcher.addAnonymousPath("/swagger-ui/**");
+    securityPathMatcher.addAnonymousPath("/swagger-resources/**");
+    securityPathMatcher.addAnonymousPath("/v3/api-docs/**");
+    securityPathMatcher.addAnonymousPath("/webjars/**");
   }
 
   /**

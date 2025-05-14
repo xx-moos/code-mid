@@ -30,10 +30,20 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Resource
     private JwtTokenUtil jwtTokenUtil;
+    
+    @Resource
+    private SecurityPathMatcher securityPathMatcher;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
+        
+        // 检查请求路径是否匹配匿名访问路径
+        if (securityPathMatcher.matches(request)) {
+            log.debug("匿名访问路径，跳过JWT验证: {}", requestURI);
+            chain.doFilter(request, response);
+            return;
+        }
         
         // 获取请求头中的token
         String token = getTokenFromRequest(request);
