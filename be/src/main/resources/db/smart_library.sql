@@ -3,15 +3,15 @@
 
  Source Server         : local
  Source Server Type    : MySQL
- Source Server Version : 80042
- Source Host           : 192.168.8.129:3306
+ Source Server Version : 90300
+ Source Host           : 192.168.75.129:3306
  Source Schema         : smart_library
 
  Target Server Type    : MySQL
- Target Server Version : 80042
+ Target Server Version : 90300
  File Encoding         : 65001
 
- Date: 14/05/2025 21:06:49
+ Date: 15/05/2025 00:34:36
 */
 
 SET NAMES utf8mb4;
@@ -71,7 +71,7 @@ CREATE TABLE `book`  (
 -- ----------------------------
 -- Records of book
 -- ----------------------------
-INSERT INTO `book` VALUES (1, '1231', '12314', '123', '002', '2025-05-11', '123123', NULL, NULL, '/bapi/upload/fbbfd769-680f-4e38-bebe-b7fdebcbd858.png', 342, 3, 0.0, 0, '2025-05-13 19:28:00', '2025-05-14 11:35:26', 0);
+INSERT INTO `book` VALUES (1, '1231', '12314', '123', '002', '2025-05-11', '123123', NULL, NULL, '/bapi/upload/fbbfd769-680f-4e38-bebe-b7fdebcbd858.png', 343, 4, 0.0, 0, '2025-05-13 19:28:00', '2025-05-14 14:04:41', 0);
 INSERT INTO `book` VALUES (2, '1231', '12314', '123', '002', '2025-05-11', '123123', NULL, 'hahsahdwbidbnaiwndfsivifdndfueifnesiufnseiufhsiufnsidhfnseuifheisufhsienwkjnriwneiufnisdufhis777', '/bapi/upload/d7321cca-48e9-455d-ac55-9bb4cf4d1968.png', 344, 0, 0.0, 0, '2025-05-13 19:30:55', '2025-05-13 19:36:10', 0);
 
 -- ----------------------------
@@ -114,12 +114,11 @@ CREATE TABLE `book_collection`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_user_book`(`user_id` ASC, `book_id` ASC) USING BTREE,
   INDEX `idx_book_id`(`book_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书收藏表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书收藏表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of book_collection
 -- ----------------------------
-INSERT INTO `book_collection` VALUES (4, 6, 1, '2025-05-14 19:51:44');
 
 -- ----------------------------
 -- Table structure for book_comment
@@ -141,17 +140,18 @@ CREATE TABLE `book_comment`  (
   INDEX `idx_user_id`(`user_id` ASC) USING BTREE,
   INDEX `idx_book_id`(`book_id` ASC) USING BTREE,
   INDEX `idx_parent_id`(`parent_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书评论表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书评论表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of book_comment
 -- ----------------------------
-INSERT INTO `book_comment` VALUES (1, 6, 1, 'adwdawdawdadwvvv', NULL, 0, '2025-05-14 16:45:44', '2025-05-14 16:45:44', 0, 1, '4');
+INSERT INTO `book_comment` VALUES (1, 6, 1, 'adwdawdawdadwvvv', NULL, 0, '2025-05-14 16:45:44', '2025-05-14 22:33:20', 1, 1, '4');
 INSERT INTO `book_comment` VALUES (2, 6, 1, 'njkvnsensivseiunfsiuenfis', NULL, 0, '2025-05-14 16:46:29', '2025-05-14 16:46:29', 0, 1, '4');
 INSERT INTO `book_comment` VALUES (3, 6, 1, '56756756756576757', NULL, 0, '2025-05-14 16:47:18', '2025-05-14 16:47:18', 0, 0, '4');
 INSERT INTO `book_comment` VALUES (4, 6, 1, 'c aodwdawdwdv', NULL, 0, '2025-05-14 16:49:18', '2025-05-14 16:49:18', 0, 2, '3');
 INSERT INTO `book_comment` VALUES (5, 6, 1, '你好哇是怎么样', 2, 0, '2025-05-14 17:28:47', '2025-05-14 17:28:47', 0, 1, '3');
 INSERT INTO `book_comment` VALUES (6, 6, 1, '啊啊', 5, 0, '2025-05-14 17:44:48', '2025-05-14 17:44:48', 0, 1, '3');
+INSERT INTO `book_comment` VALUES (7, 6, 1, '1151596567567', 2, 0, '2025-05-14 22:37:04', '2025-05-14 22:37:04', 0, 0, '4');
 
 -- ----------------------------
 -- Table structure for book_similarity
@@ -164,7 +164,7 @@ CREATE TABLE `book_similarity`  (
   PRIMARY KEY (`book_id_1`, `book_id_2`) USING BTREE,
   INDEX `idx_book_id_1_score`(`book_id_1` ASC, `similarity_score` DESC) USING BTREE,
   INDEX `idx_book_id_2`(`book_id_2` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书相似度表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书相似度表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of book_similarity
@@ -193,15 +193,15 @@ CREATE TABLE `borrow_record`  (
   INDEX `idx_book_id`(`book_id` ASC) USING BTREE,
   INDEX `idx_status`(`status` ASC) USING BTREE,
   INDEX `idx_due_time`(`return_date` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '借阅记录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '借阅记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of borrow_record
 -- ----------------------------
 INSERT INTO `borrow_record` VALUES (1, 6, 1, '2025-05-14 18:25:47', '2025-07-14 18:25:47', NULL, 0, 0, NULL, '2025-05-14 18:25:47', '2025-05-14 11:39:10', 0, '0');
 INSERT INTO `borrow_record` VALUES (2, 6, 1, '2025-05-14 18:26:51', '2025-07-14 18:26:51', NULL, 0, 1, NULL, '2025-05-14 18:26:51', '2025-05-14 11:39:08', 0, '0');
-INSERT INTO `borrow_record` VALUES (3, 6, 1, '2025-05-14 18:32:16', '2025-08-13 18:32:16', NULL, 0, 1, NULL, '2025-05-14 18:32:16', '2025-05-14 11:39:08', 0, '1');
-INSERT INTO `borrow_record` VALUES (4, 6, 1, '2025-05-14 18:47:21', '2025-06-21 10:46:57', '2025-05-14 19:31:56', 0, 2, NULL, '2025-05-14 18:47:21', '2025-05-14 18:47:21', 0, '0');
+INSERT INTO `borrow_record` VALUES (3, 6, 1, '2025-05-14 18:32:16', '2025-08-13 18:32:16', '2025-05-14 22:04:39', 0, 2, 4, '2025-05-14 18:32:16', '2025-05-14 11:39:08', 0, '1');
+INSERT INTO `borrow_record` VALUES (4, 6, 1, '2025-05-14 18:47:21', '2025-06-21 10:46:57', NULL, 0, 1, NULL, '2025-05-14 18:47:21', '2025-05-14 14:04:32', 0, '0');
 
 -- ----------------------------
 -- Table structure for user
