@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
 })
-export class BorrowListComponent implements OnInit {
+export class BorrowAdminListComponent implements OnInit {
   validateForm!: UntypedFormGroup;
 
   loading = false;
@@ -62,7 +62,7 @@ export class BorrowListComponent implements OnInit {
     this.loading = true;
     this.search.current = page;
 
-    this.apiService.get('/borrow/my', { params: this.search }).subscribe(
+    this.apiService.get('/borrow/page', { params: this.search }).subscribe(
       (res: any) => {
         this.loading = false;
         console.log(`res ->:`, res);
@@ -86,10 +86,10 @@ export class BorrowListComponent implements OnInit {
     this.loadList(size);
   };
 
-  returnItem = (ids: any) => {
-    this.apiService.post('/borrow/return/' + ids, {}).subscribe(
+  auditItem = (ids: any) => {
+    this.apiService.put('/borrow/audit/' + ids).subscribe(
       (res: any) => {
-        this.message.success('操作成功');
+        this.message.success('审核成功');
         this.loadList(1);
       },
       (err) => {
@@ -98,20 +98,6 @@ export class BorrowListComponent implements OnInit {
     );
   };
 
-  renewItem = (ids: any) => {
-    this.apiService.post('/borrow/renew/' + ids, {}).subscribe(
-      (res: any) => {
-        console.log(`res ->:`, res)
-        if (res.code != 200) {
-          this.message.error(res.message);
-          return;
-        }
-        this.message.success('操作成功');
-        this.loadList(1);
-      },
-      (err) => {
-        this.message.error(err.message);
-      }
-    );
-  };
+
+
 }

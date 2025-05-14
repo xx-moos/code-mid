@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.library.vo.BookCommentVO;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.util.List;
+
 /**
  * <p>
  * 图书评论表 服务类
@@ -61,4 +63,6 @@ public interface IBookCommentService extends IService<BookComment> {
      * @param status 状态
      */
     void auditComment(Long commentId, Integer status);
-} 
+
+    Page<BookCommentVO> getAllComments(BookCommentPageQueryDTO queryDTO);
+}

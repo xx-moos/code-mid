@@ -25,6 +25,13 @@ export class CommentAdminListComponent implements OnInit {
   lists: any = [];
   totalCount = 0;
 
+  // 0-待审核, 1-审核通过，2-审核拒绝
+  statusMap: any = {
+    0: '待审核',
+    1: '审核通过',
+    2: '审核拒绝',
+  };
+
   constructor(
     private apiService: ApiService,
     private message: NzMessageService,
@@ -44,12 +51,12 @@ export class CommentAdminListComponent implements OnInit {
     this.search.current = page;
 
     this.apiService
-      .get('/api/book-comment/page', { params: this.search })
+      .get('/api/book-comment/all', { params: this.search })
       .subscribe(
         (res: any) => {
           this.loading = false;
-          var data = res;
-          this.lists = data?.list || [];
+          var data = res.data;
+          this.lists = data?.records || [];
           this.totalCount = data?.total || 0;
         },
         (err) => {

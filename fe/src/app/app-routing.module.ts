@@ -15,6 +15,7 @@ import { UserEditComponent } from './pages/user/edit/edit.component';
 import { UserListComponent } from './pages/user/list/list.component';
 import { BookEditComponent } from './pages/book/admin-edit/edit.component';
 import { BookListComponent } from './pages/book/admin-list/list.component';
+import { BorrowAdminListComponent } from './pages/borrow/admin-list/list.component';
 import { BorrowListComponent } from './pages/borrow/list/list.component';
 import { CommentAdminListComponent } from './pages/comment/admin-list/list.component';
 import { BookInfoComponent } from './pages/book/info/info.component';
@@ -63,7 +64,7 @@ const routes: Routes = [
       { path: 'book-edit', component: BookEditComponent },
 
       { path: 'category-list', component: CategoryListComponent },
-      { path: 'borrow-list', component: BorrowListComponent },
+      { path: 'borrow-list', component: BorrowAdminListComponent },
 
       { path: 'note-list', component: NoteAdminListComponent },
 

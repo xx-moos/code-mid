@@ -47,7 +47,7 @@ public class BorrowController {
         if (currentUser == null) {
             return Result.unauthorized();
         }
-        BorrowRecord record = borrowService.borrow(currentUser.getId(), borrowDTO.getBookId());
+        BorrowRecord record = borrowService.borrow(currentUser.getId(), borrowDTO);
         return Result.success(record);
     }
 

@@ -1,13 +1,13 @@
 <div class="views-gongzuorenyuan-list">
   <div>
-    <nz-card class="box-card" [nzTitle]="'我的借阅查询'">
+    <nz-card class="box-card" [nzTitle]="'借阅查询'">
       <div class="">
         <nz-space nzAlign="center">
-          <!-- <span *nzSpaceItem>用户名</span> -->
-          <!-- <input *nzSpaceItem nz-input [(ngModel)]="search.username" /> -->
-          <!-- <span *nzSpaceItem>图书名称</span> -->
-          <!-- <input *nzSpaceItem nz-input [(ngModel)]="search.bookName" /> -->
-          <span *nzSpaceItem>状态</span>
+          <span *nzSpaceItem>用户名</span>
+          <input *nzSpaceItem nz-input [(ngModel)]="search.username" />
+          <span *nzSpaceItem>图书名称</span>
+          <input *nzSpaceItem nz-input [(ngModel)]="search.bookName" />
+          <span *nzSpaceItem>借阅状态</span>
           <nz-select
             *nzSpaceItem
             nz-select
@@ -44,7 +44,6 @@
             <th>预计归还时间</th>
             <th>实际归还时间</th>
             <th>是否逾期</th>
-            <th>是否续借</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -67,27 +66,16 @@
             <td>{{ data?.returnDate }}</td>
             <td>{{ data?.actualReturnDate }}</td>
             <td>{{ data?.isOverdue ? "是" : "否" }}</td>
-            <td>{{ data?.renewTimes ? "是" : "否" }}</td>
             <td>
               <nz-space>
-                <ng-container *ngIf="data?.status === 1">
+                <ng-container *ngIf="data?.status === 0">
                   <a
                     *nzSpaceItem
                     nz-popconfirm
-                    nzPopconfirmTitle="归还图书？"
+                    nzPopconfirmTitle="审核通过？"
                     nzPopconfirmPlacement="bottom"
-                    (nzOnConfirm)="returnItem(data.id)"
-                    >归还</a
-                  >
-                </ng-container>
-                <ng-container *ngIf="data?.status === 1 && data?.renewTimes < 1">
-                  <a
-                    *nzSpaceItem
-                    nz-popconfirm
-                    nzPopconfirmTitle="续借图书？"
-                    nzPopconfirmPlacement="bottom"
-                    (nzOnConfirm)="renewItem(data.id)"
-                    >续借</a
+                    (nzOnConfirm)="auditItem(data.id)"
+                    >审核</a
                   >
                 </ng-container>
               </nz-space>

@@ -1,5 +1,13 @@
 <div class="comment-form">
   <form nz-form [formGroup]="validateForm">
+    <nz-form-item *ngIf="selectedComment.id">
+      <nz-form-label>回复ta</nz-form-label>
+      <nz-form-control>
+        <span>{{ selectedComment.username }}</span>
+        <span>{{ selectedComment.content }}</span>
+      </nz-form-control>
+    </nz-form-item>
+
     <nz-form-item>
       <nz-form-label nzRequired>评分</nz-form-label>
       <nz-form-control nzErrorTip="请评分">
@@ -40,9 +48,53 @@
           </span>
           <span class="comment-time">{{ v.createTime }}</span>
           &nbsp;
-          <span>回复</span>
+          <span
+            (click)="replyComment(v)"
+            *ngIf="!selectedComment.id || selectedComment.id !== v.id"
+            >回复</span
+          >
+          &nbsp;
+          <span
+            style="color: red"
+            (click)="cancelReply()"
+            *ngIf="selectedComment.id && selectedComment.id === v.id"
+            >取消</span
+          >
         </p>
         <div class="comment-content J_CommentContent">{{ v.content }}</div>
+
+        <div class="comment" *ngFor="let v of v.children">
+          <div class="common-avatar J_User">
+            <img
+              [src]="'http://localhost:8080' + v.userAvatar"
+              width="100%"
+              height="100%"
+            />
+          </div>
+          <div class="comment-block">
+            <p class="comment-user">
+              <span class="comment-username J_User"> {{ v.username }} </span>
+              <span>
+                <nz-rate [ngModel]="v.star" nzDisabled></nz-rate>
+              </span>
+              <span class="comment-time">{{ v.createTime }}</span>
+              &nbsp;
+              <span
+                (click)="replyComment(v)"
+                *ngIf="!selectedComment.id || selectedComment.id !== v.id"
+                >回复</span
+              >
+              &nbsp;
+              <span
+                style="color: red"
+                (click)="cancelReply()"
+                *ngIf="selectedComment.id && selectedComment.id === v.id"
+                >取消</span
+              >
+            </p>
+            <div class="comment-content J_CommentContent">{{ v.content }}</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

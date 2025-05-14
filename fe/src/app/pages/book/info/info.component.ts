@@ -4,6 +4,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import dayjs from 'dayjs/esm';
 
 @Component({
   selector: 'app-book-info',
@@ -31,12 +33,14 @@ export class BookInfoComponent implements OnInit {
     private message: NzMessageService,
     private fb: UntypedFormBuilder,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private modal: NzModalService
   ) {}
 
   ngOnInit() {
     this.id = this.route.snapshot.queryParams['id'];
     this.loadList();
+    this.checkCollect();
 
     this.validateForm = this.fb.group({
       title: ['', []],
@@ -142,7 +146,80 @@ export class BookInfoComponent implements OnInit {
     this.router.navigate(['/book-detail', id]);
   };
 
-  borrowBook = (id: any) => {
-    this.router.navigate(['/book-borrow', id]);
+  returnDate = '';
+  borrowBookModalRef: any = null;
+  disabledDate = (current: Date): boolean => {
+    // 最长期限为当前日期的后两个月
+    return current && current > dayjs().add(2, 'month').toDate();
+  };
+
+  borrowBook = (id: any, borrowBookModal: any) => {
+    this.borrowBookModalRef = this.modal.create({
+      nzTitle: '图书借阅',
+      nzContent: borrowBookModal,
+      nzFooter: null,
+    });
+  };
+
+  borrowBookRequest = () => {
+    if (!this.returnDate) {
+      this.message.error('请选择预计归还日期');
+      return;
+    }
+    this.apiService
+      .post('/borrow', {
+        bookId: this.id,
+        returnDate: this.returnDate,
+      })
+      .subscribe(
+        (res: any) => {
+          this.message.success('操作成功');
+          this.borrowBookModalRef.destroy();
+        },
+        (err) => {
+          this.message.error(err.message);
+        }
+      );
+  };
+
+  collectBook = (id: any) => {
+    this.apiService
+      .post('/book-collection', {
+        bookId: id,
+      })
+      .subscribe(
+        (res: any) => {
+          this.message.success('操作成功');
+          this.checkCollect();
+        },
+        (err) => {
+          this.message.error(err.message);
+        }
+      );
+  };
+
+  isCollect = false;
+
+  checkCollect = () => {
+    this.apiService.get('/book-collection/is-collected/' + this.id).subscribe(
+      (res: any) => {
+        this.isCollect = res.data;
+      },
+      (err) => {
+        this.message.error(err.message);
+      }
+    );
+  };
+
+  deleteCollect = (id: any) => {
+    this.apiService.delete('/book-collection/' + id).subscribe(
+      (res: any) => {
+        this.message.success('操作成功');
+        this.checkCollect();
+      },
+      (err) => {
+        this.message.error(err.message);
+      }
+    );
   };
 }

@@ -247,4 +247,42 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
     updateById(comment);
   }
 
+  @Override
+  public Page<BookCommentVO> getAllComments(BookCommentPageQueryDTO queryDTO) {
+    Page<BookComment> page = new Page<>(queryDTO.getCurrent(), queryDTO.getSize());
+    LambdaQueryWrapper<BookComment> queryWrapper = new LambdaQueryWrapper<>();
+
+    if (queryDTO.getStatus() != null) {
+      queryWrapper.eq(BookComment::getStatus, queryDTO.getStatus());
+    }
+
+    if (queryDTO.getBookId() != null) {
+      queryWrapper.eq(BookComment::getBookId, queryDTO.getBookId());
+    }
+
+    queryWrapper.orderByDesc(BookComment::getCreateTime);
+
+    Page<BookComment> commentPage = baseMapper.selectPage(page, queryWrapper); // 应用查询条件
+    // 手动转换记录
+    List<BookCommentVO> voList = commentPage.getRecords().stream().map(comment -> {
+      BookCommentVO vo = new BookCommentVO();
+      BeanUtils.copyProperties(comment, vo);
+
+      User user = userService.getById(comment.getUserId());
+      if (user != null) {
+        vo.setUsername(user.getUsername());
+        vo.setUserAvatar(user.getAvatar());
+      }
+
+      return vo;
+    }).collect(Collectors.toList());
+
+    // 创建新的 Page<BookCommentVO>
+    Page<BookCommentVO> voPage = new Page<>(commentPage.getCurrent(), commentPage.getSize(),
+        commentPage.getTotal());
+    voPage.setRecords(voList);
+
+    return voPage;
+  }
+
 }

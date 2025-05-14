@@ -71,6 +71,9 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
       updateWrapper.setSql("stock = stock + " + stock);
     }
 
+    // 更新借阅次数
+    updateWrapper.setSql("borrow_count = borrow_count + " + 1);
+
     return update(updateWrapper);
   }
 

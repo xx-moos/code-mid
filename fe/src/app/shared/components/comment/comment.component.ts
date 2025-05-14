@@ -23,6 +23,8 @@ export class CommentComponent implements OnInit {
 
   lists: any[] = [];
 
+  selectedComment: any = {};
+
   constructor(
     private fb: UntypedFormBuilder,
     private ApiService: ApiService,
@@ -69,10 +71,12 @@ export class CommentComponent implements OnInit {
       this.ApiService.post(`/api/book-comment`, {
         ...this.validateForm.value,
         bookId: this.bookId,
+        parentId: this.selectedComment.id,
       }).subscribe((res: any) => {
         this.validateForm.reset();
         this.getComments();
         this.message.success('操作成功');
+        this.selectedComment = {};
       });
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
@@ -82,5 +86,14 @@ export class CommentComponent implements OnInit {
         }
       });
     }
+  }
+
+  replyComment(comment: any) {
+    console.log(`comment ->:`, comment);
+    this.selectedComment = comment;
+  }
+
+  cancelReply() {
+    this.selectedComment = {};
   }
 }

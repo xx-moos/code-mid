@@ -2,6 +2,7 @@ package com.library.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.library.dto.BorrowDTO;
 import com.library.entity.BorrowRecord;
 import com.library.vo.BorrowRecordVO;
 
@@ -16,7 +17,7 @@ public interface BorrowService extends IService<BorrowRecord> {
      * @param bookId 图书ID
      * @return 借阅记录
      */
-    BorrowRecord borrow(Long userId, Long bookId);
+    BorrowRecord borrow(Long userId, BorrowDTO borrowDTO);
     
     /**
      * 还书

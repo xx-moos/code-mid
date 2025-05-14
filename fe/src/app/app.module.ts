@@ -31,8 +31,8 @@ import { BookEditComponent } from './pages/book/admin-edit/edit.component';
 import { UserListComponent } from './pages/user/list/list.component';
 import { CategoryListComponent } from './pages/category/list/list.component';
 import { CategoryEditComponent } from './pages/category/edit/edit.component';
+import { BorrowAdminListComponent } from './pages/borrow/admin-list/list.component';
 import { BorrowListComponent } from './pages/borrow/list/list.component';
-import { BorrowEditComponent } from './pages/borrow/edit/edit.component';
 import { NoteAdminListComponent } from './pages/note/admin-list/list.component';
 import { NoteAdminEditComponent } from './pages/note/admin-edit/edit.component';
 import { CommentAdminListComponent } from './pages/comment/admin-list/list.component';
@@ -95,8 +95,8 @@ registerLocaleData(zh);
     CategoryListComponent,
     CategoryEditComponent,
 
+    BorrowAdminListComponent,
     BorrowListComponent,
-    BorrowEditComponent,
 
     NoteAdminListComponent,
     NoteAdminEditComponent,

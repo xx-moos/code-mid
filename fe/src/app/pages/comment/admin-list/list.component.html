@@ -30,8 +30,12 @@
         <thead>
           <tr>
             <th>id</th>
-            <th>用户</th>
+            <th>用户id</th>
+            <th>用户名</th>
+            <th>图书id</th>
             <th>内容</th>
+            <th>评分</th>
+            <th>状态</th>
             <th>发布时间</th>
             <th>操作</th>
           </tr>
@@ -39,28 +43,36 @@
         <tbody>
           <tr *ngFor="let data of basicTable.data">
             <td>{{ data?.id }}</td>
-            <td>{{ data?.user_id }}</td>
+            <td>{{ data?.userId }}</td>
+            <td>{{ data?.username }}</td>
+            <td>{{ data?.bookId }}</td>
             <td>{{ data?.content }}</td>
+            <td>{{ data?.star }}</td>
+            <td>{{ statusMap[data?.status] }}</td>
             <td>{{ data?.createTime | date : "yyyy-MM-dd HH:mm:ss" }}</td>
             <td>
               <nz-space>
-                <a
-                  *nzSpaceItem
-                  nz-popconfirm
-                  nzPopconfirmTitle="确认审核通过吗？"
-                  nzPopconfirmPlacement="bottom"
-                  (nzOnConfirm)="auditItem(data.id, 1)"
-                  >审核通过</a
-                >
-                <a
-                  style="color: red"
-                  *nzSpaceItem
-                  nz-popconfirm
-                  nzPopconfirmTitle="确认审核拒绝吗？"
-                  nzPopconfirmPlacement="bottom"
-                  (nzOnConfirm)="auditItem(data.id, 2)"
-                  >审核拒绝</a
-                >
+                <ng-container *ngIf="data?.status === 0">
+                  <a
+                    *nzSpaceItem
+                    nz-popconfirm
+                    nzPopconfirmTitle="确认审核通过吗？"
+                    nzPopconfirmPlacement="bottom"
+                    (nzOnConfirm)="auditItem(data.id, 1)"
+                    >审核通过</a
+                  >
+                </ng-container>
+                <ng-container *ngIf="data?.status === 0">
+                  <a
+                    style="color: red"
+                    *nzSpaceItem
+                    nz-popconfirm
+                    nzPopconfirmTitle="确认审核拒绝吗？"
+                    nzPopconfirmPlacement="bottom"
+                    (nzOnConfirm)="auditItem(data.id, 2)"
+                    >审核拒绝</a
+                  >
+                </ng-container>
               </nz-space>
             </td>
           </tr>

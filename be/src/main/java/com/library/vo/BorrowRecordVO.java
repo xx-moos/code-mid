@@ -83,9 +83,9 @@ public class BorrowRecordVO {
     private Integer renewTimes;
 
     /**
-     * 状态（0-借阅中，1-已归还，2-逾期未还，3-丢失）
+     * 状态（0-待审核, 1-借阅中，2-已归还，3-逾期未还）
      */
-    @ApiModelProperty("状态（0-借阅中，1-已归还，2-逾期未还，3-丢失）")
+    @ApiModelProperty("状态（0-待审核, 1-借阅中，2-已归还，3-逾期未还）")
     private Integer status;
 
     /**

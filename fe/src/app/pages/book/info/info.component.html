@@ -43,8 +43,31 @@
               </div>
             </div>
 
-            <button nz-button nzType="primary" (click)="borrowBook(map.id)">
+            <button
+              nz-button
+              nzType="primary"
+              (click)="borrowBook(map.id, borrowBookModal)"
+            >
               图书借阅
+            </button>
+            &nbsp;
+            <button
+              nz-button
+              nzType="primary"
+              *ngIf="!isCollect"
+              (click)="collectBook(map.id)"
+            >
+              图书收藏
+            </button>
+            &nbsp;
+            <button
+              nz-button
+              nzDanger
+              nzType="primary"
+              *ngIf="isCollect"
+              (click)="deleteCollect(map.id)"
+            >
+              取消收藏
             </button>
           </div>
         </div>
@@ -66,3 +89,23 @@
     </nz-tabset>
   </app-e-container>
 </div>
+
+<ng-template #borrowBookModal>
+  <div>
+    <nz-space nzAlign="center">
+      <span *nzSpaceItem>预计归还日期</span>
+      <nz-date-picker
+        *nzSpaceItem
+        [(ngModel)]="returnDate"
+        format="YYYY-MM-DD"
+        [nzDisabledDate]="disabledDate"
+      ></nz-date-picker>
+    </nz-space>
+  </div>
+  <br />
+  <div>
+    <button nz-button nzType="primary" (click)="borrowBookRequest()">
+      申请借阅
+    </button>
+  </div>
+</ng-template>

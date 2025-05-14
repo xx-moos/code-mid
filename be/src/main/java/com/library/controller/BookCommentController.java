@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.validation.Valid;
 
@@ -21,57 +23,66 @@ import javax.validation.Valid;
 @Slf4j
 public class BookCommentController {
 
-    @Resource
-    private IBookCommentService bookCommentService;
+  @Resource
+  private IBookCommentService bookCommentService;
 
-    @ApiOperation("添加图书评论")
-    @PostMapping
-    public Result<Void> addComment(@Valid @RequestBody BookCommentAddDTO addDTO) {
-        bookCommentService.addComment(addDTO);
-        return Result.success();
-    }
+  @ApiOperation("添加图书评论")
+  @PostMapping
+  public Result<Void> addComment(@Valid @RequestBody BookCommentAddDTO addDTO) {
+    bookCommentService.addComment(addDTO);
+    return Result.success();
+  }
 
-    @ApiOperation("修改图书评论")
-    @PutMapping
-    public Result<Void> updateComment(@Valid @RequestBody BookCommentUpdateDTO updateDTO) {
-        bookCommentService.updateComment(updateDTO);
-        return Result.success();
-    }
+  @ApiOperation("修改图书评论")
+  @PutMapping
+  public Result<Void> updateComment(@Valid @RequestBody BookCommentUpdateDTO updateDTO) {
+    bookCommentService.updateComment(updateDTO);
+    return Result.success();
+  }
 
-    @ApiOperation("删除图书评论")
-    @DeleteMapping("/{commentId}")
-    public Result<Void> deleteComment(@PathVariable Long commentId) {
-        bookCommentService.deleteComment(commentId);
-        return Result.success();
-    }
+  @ApiOperation("删除图书评论")
+  @DeleteMapping("/{commentId}")
+  public Result<Void> deleteComment(@PathVariable Long commentId) {
+    bookCommentService.deleteComment(commentId);
+    return Result.success();
+  }
 
-    @ApiOperation("分页查询图书评论")
-    @GetMapping("/page")
-    public Result<Page<BookCommentVO>> getBookCommentsPage(@Valid BookCommentPageQueryDTO queryDTO) {
-        Page<BookCommentVO> pageData = bookCommentService.getBookCommentsPage(queryDTO);
-        return Result.success(pageData);
-    }
+  @ApiOperation("分页查询图书评论")
+  @GetMapping("/page")
+  public Result<Page<BookCommentVO>> getBookCommentsPage(@Valid BookCommentPageQueryDTO queryDTO) {
+    Page<BookCommentVO> pageData = bookCommentService.getBookCommentsPage(queryDTO);
+    return Result.success(pageData);
+  }
 
-    @ApiOperation("点赞评论")
-    @PostMapping("/{commentId}/like")
-    public Result<Void> likeComment(@PathVariable Long commentId) {
-        bookCommentService.likeComment(commentId);
-        return Result.success();
-    }
-
-    @ApiOperation("取消点赞评论")
-    @PostMapping("/{commentId}/unlike") // 使用POST或者DELETE均可，根据RESTful偏好选择
-    public Result<Void> unlikeComment(@PathVariable Long commentId) {
-        bookCommentService.unlikeComment(commentId);
-        return Result.success();
-    }
-
-    @ApiOperation("审核评论")
-    @GetMapping("/audit/{commentId}")
-    public Result<Void> auditComment(@PathVariable Long commentId, @RequestParam Integer status) {
-        bookCommentService.auditComment(commentId, status);
-        return Result.success();
-    }
+  @ApiOperation("查询所有评论")
+  @GetMapping("/all")
+  public Result<Page<BookCommentVO>> getAllComments(@Valid BookCommentPageQueryDTO queryDTO) {
+    Page<BookCommentVO> comments = bookCommentService.getAllComments(queryDTO);
+    return Result.success(comments);
+  }
 
 
-} 
+
+
+  @ApiOperation("点赞评论")
+  @PostMapping("/{commentId}/like")
+  public Result<Void> likeComment(@PathVariable Long commentId) {
+    bookCommentService.likeComment(commentId);
+    return Result.success();
+  }
+
+  @ApiOperation("取消点赞评论")
+  @PostMapping("/{commentId}/unlike") // 使用POST或者DELETE均可，根据RESTful偏好选择
+  public Result<Void> unlikeComment(@PathVariable Long commentId) {
+    bookCommentService.unlikeComment(commentId);
+    return Result.success();
+  }
+
+  @ApiOperation("审核评论")
+  @GetMapping("/audit/{commentId}")
+  public Result<Void> auditComment(@PathVariable Long commentId, @RequestParam Integer status) {
+    bookCommentService.auditComment(commentId, status);
+    return Result.success();
+  }
+
+}
