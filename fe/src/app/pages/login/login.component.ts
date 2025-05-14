@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service'; // Correct path
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../../core/services/api.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +33,8 @@ export class LoginComponent implements OnInit {
     private apiService: ApiService,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private message: NzMessageService
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +59,12 @@ export class LoginComponent implements OnInit {
       .post<any>('/auth/login', { ...this.form, captchaId: this.captchaId })
       .subscribe({
         next: (response) => {
+          this.loadCaptch();
+          if (response.code != 200) {
+            this.message.error(response.message);
+            return;
+          }
+
           console.log('Login successful:', response);
           localStorage.setItem(
             'userInfo',

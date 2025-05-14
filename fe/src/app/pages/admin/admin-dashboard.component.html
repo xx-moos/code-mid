@@ -37,9 +37,9 @@
       <li nz-menu-item nzMatchRouter>
         <a routerLink="/admin/comment-list">评论管理</a>
       </li>
-      <li nz-menu-item nzMatchRouter>
+      <!-- <li nz-menu-item nzMatchRouter>
         <a routerLink="/admin/notice-list">可视化统计</a>
-      </li>
+      </li> -->
     </ul>
   </nz-sider>
   <nz-layout>
@@ -52,6 +52,7 @@
             [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
           ></span>
         </span>
+        <a [routerLink]="['/']">网站首页</a>
       </div>
     </nz-header>
     <nz-content>
