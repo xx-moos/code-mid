@@ -11,7 +11,7 @@
  Target Server Version : 90300
  File Encoding         : 65001
 
- Date: 13/05/2025 21:58:55
+ Date: 14/05/2025 09:49:14
 */
 
 SET NAMES utf8mb4;
@@ -38,6 +38,7 @@ CREATE TABLE `announcement`  (
 -- ----------------------------
 -- Records of announcement
 -- ----------------------------
+INSERT INTO `announcement` VALUES (1, '45345345', '8768678678678678\nbfdbfd\ndfsef\ndsfe\n4545\nbgbgf\nngfgfnf\nmhmg\n11', 1, 0, '2025-05-13 22:38:01', '2025-05-13 17:12:19', 0);
 
 -- ----------------------------
 -- Table structure for book
@@ -133,6 +134,7 @@ CREATE TABLE `book_comment`  (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除：0-未删除，1-已删除',
+  `status` tinyint NOT NULL COMMENT '状态：0-待审核, 1-审核通过，2-审核拒绝',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_user_id`(`user_id` ASC) USING BTREE,
   INDEX `idx_book_id`(`book_id` ASC) USING BTREE,
