@@ -1,7 +1,9 @@
-11516
-
-<nz-carousel [nzEffect]="effect" nzAutoPlay>
-  <div nz-carousel-content *ngFor="let index of array">
-    <h3>{{ index }}</h3>
-  </div>
-</nz-carousel>
+<swiper [spaceBetween]="10" [navigation]="true" class="top-swiper">
+  <ng-template
+    swiperSlide
+    class="slide"
+    *ngFor="let imageUrl of array; let index = index"
+  >
+    <img [src]="imageUrl" class="img-cover" alt="Image" />
+  </ng-template>
+</swiper>

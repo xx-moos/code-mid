@@ -5,16 +5,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.library.common.ResultCode;
 import com.library.common.exception.CustomException;
+import com.library.entity.Book;
 import com.library.entity.BookCollection;
 import com.library.entity.User;
 import com.library.mapper.BookCollectionMapper;
+import com.library.service.BookService;
 import com.library.service.IBookCollectionService;
 import com.library.service.UserService;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 
 /**
  * 图书收藏服务实现类
@@ -25,6 +28,9 @@ public class BookCollectionServiceImpl extends ServiceImpl<BookCollectionMapper,
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private BookService bookService;
 
     /**
      * 获取当前登录用户，如果未登录则抛出异常
@@ -90,7 +96,34 @@ public class BookCollectionServiceImpl extends ServiceImpl<BookCollectionMapper,
         LambdaQueryWrapper<BookCollection> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(BookCollection::getUserId, userId)
                 .orderByDesc(BookCollection::getCreateTime);
-        return this.page(page, queryWrapper);
+
+        // 先执行分页查询获取当前页的收藏记录
+        Page<BookCollection> collectionPage = this.page(page, queryWrapper);
+        List<BookCollection> collections = collectionPage.getRecords();
+        
+        if (!collections.isEmpty()) {
+            // 获取当前页所有收藏记录的图书ID
+            List<Long> bookIds = collections.stream()
+                    .map(BookCollection::getBookId)
+                    .collect(Collectors.toList());
+            
+            // 批量查询这些图书的信息
+            List<Book> books = bookService.listByIds(bookIds);
+            
+            // 将图书信息关联到收藏记录中
+            for (BookCollection collection : collections) {
+                Book book = books.stream()
+                        .filter(b -> b.getId().equals(collection.getBookId()))
+                        .findFirst()
+                        .orElse(null);
+                
+                if (book != null) {
+                    collection.setBookName(book.getName());
+                }
+            }
+        }
+          
+        return collectionPage;
     }
 
     @Override

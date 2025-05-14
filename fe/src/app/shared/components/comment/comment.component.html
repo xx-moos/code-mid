@@ -81,7 +81,10 @@
               &nbsp;
               <span
                 (click)="replyComment(v)"
-                *ngIf="!selectedComment.id || selectedComment.id !== v.id"
+                *ngIf="
+                  (!selectedComment.id || selectedComment.id !== v.id) &&
+                  !v.parentId
+                "
                 >回复</span
               >
               &nbsp;

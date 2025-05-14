@@ -38,6 +38,9 @@ import { NoteAdminEditComponent } from './pages/note/admin-edit/edit.component';
 import { CommentAdminListComponent } from './pages/comment/admin-list/list.component';
 import { CommentAdminEditComponent } from './pages/comment/admin-edit/edit.component';
 import { BookInfoComponent } from './pages/book/info/info.component';
+import { CollectListComponent } from './pages/collection/list/list.component';
+import { CommentListComponent } from './pages/comment/list/list.component';
+import { NoteInfoComponent } from './pages/note/info/list.component';
 
 import { BannerComponent } from './shared/components/banner/banner.component';
 import { CommentComponent } from './shared/components/comment/comment.component';
@@ -84,6 +87,7 @@ registerLocaleData(zh);
     EContainerComponent,
     ListComponent,
     NoteListComponent,
+    NoteInfoComponent,
 
     UserListComponent,
     UserEditComponent,
@@ -106,6 +110,9 @@ registerLocaleData(zh);
 
     BannerComponent,
     CommentComponent,
+
+    CollectListComponent,
+    CommentListComponent,
   ],
   imports: [
     ReactiveFormsModule,

@@ -124,6 +124,10 @@ export class NoteListComponent implements OnInit {
   };
 
   gotoDetail = (id: any) => {
-    this.router.navigate(['/note-detail', id]);
+    this.router.navigate(['/note-info'], {
+      queryParams: {
+        id: id,
+      },
+    });
   };
 }

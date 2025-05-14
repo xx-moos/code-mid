@@ -73,14 +73,13 @@
                 <ng-container *ngIf="data?.status === 1">
                   <a
                     *nzSpaceItem
-                    nz-popconfirm
-                    nzPopconfirmTitle="归还图书？"
-                    nzPopconfirmPlacement="bottom"
-                    (nzOnConfirm)="returnItem(data.id)"
+                    (click)="showReturnItem(data.id, returnContent)"
                     >归还</a
                   >
                 </ng-container>
-                <ng-container *ngIf="data?.status === 1 && data?.renewTimes < 1">
+                <ng-container
+                  *ngIf="data?.status === 1 && data?.renewTimes < 1"
+                >
                   <a
                     *nzSpaceItem
                     nz-popconfirm
@@ -108,3 +107,17 @@
     </nz-card>
   </div>
 </div>
+
+<ng-template #returnContent let-params>
+  <div>
+    <nz-space nzAlign="center">
+      <span *nzSpaceItem>归还图书打分</span>
+      <nz-rate [(ngModel)]="rating" *nzSpaceItem></nz-rate>
+    </nz-space>
+  </div>
+  <div>
+    <button nz-button nzType="primary" (click)="returnItem(params.id)">
+      确定
+    </button>
+  </div>
+</ng-template>

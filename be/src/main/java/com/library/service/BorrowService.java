@@ -18,15 +18,15 @@ public interface BorrowService extends IService<BorrowRecord> {
      * @return 借阅记录
      */
     BorrowRecord borrow(Long userId, BorrowDTO borrowDTO);
-    
+
     /**
      * 还书
      *
      * @param recordId 借阅记录ID
      * @return 是否成功
      */
-    boolean returnBook(Long recordId);
-    
+    boolean returnBook(Long recordId, Integer rating);
+
     /**
      * 续借
      *
@@ -34,7 +34,7 @@ public interface BorrowService extends IService<BorrowRecord> {
      * @return 是否成功
      */
     boolean renew(Long recordId);
-    
+
     /**
      * 查询用户的借阅记录
      *

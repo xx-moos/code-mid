@@ -33,215 +33,206 @@ import java.util.stream.Collectors;
 @Service
 public class BorrowServiceImpl extends ServiceImpl<BorrowRecordMapper, BorrowRecord> implements BorrowService {
 
-  @Resource
-  private UserService userService;
+    @Resource
+    private UserService userService;
 
-  @Resource
-  private BookService bookService;
+    @Resource
+    private BookService bookService;
 
-  @Override
-  @Transactional(rollbackFor = Exception.class)
-  public BorrowRecord borrow(Long userId, BorrowDTO borrowDTO) {
-    // 校验用户
-    User user = userService.getById(userId);
-    if (user == null) {
-      throw new CustomException(ResultCode.USER_NOT_EXIST);
-    }
-    if (user.getCreditScore() >= Constants.MAX_CREDIT_SCORE) {
-      throw new CustomException(ResultCode.CREDIT_SCORE_LIMIT);
-    }
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public BorrowRecord borrow(Long userId, BorrowDTO borrowDTO) {
+        // 校验用户
+        User user = userService.getById(userId);
+        if (user == null) {
+            throw new CustomException(ResultCode.USER_NOT_EXIST);
+        }
+        if (user.getCreditScore() >= Constants.MAX_CREDIT_SCORE) {
+            throw new CustomException(ResultCode.CREDIT_SCORE_LIMIT);
+        }
 
-    // 校验图书
-    Book book = bookService.getById(borrowDTO.getBookId());
-    if (book == null) {
-      throw new CustomException(ResultCode.BOOK_NOT_EXIST);
-    }
-    if (book.getStock() <= 0) {
-      throw new CustomException(ResultCode.BOOK_STOCK_ERROR);
-    }
+        // 校验图书
+        Book book = bookService.getById(borrowDTO.getBookId());
+        if (book == null) {
+            throw new CustomException(ResultCode.BOOK_NOT_EXIST);
+        }
+        if (book.getStock() <= 0) {
+            throw new CustomException(ResultCode.BOOK_STOCK_ERROR);
+        }
 
-    // 校验用户借阅数量
-    long borrowedCount = count(new LambdaQueryWrapper<BorrowRecord>()
-        .eq(BorrowRecord::getUserId, userId)
-        .eq(BorrowRecord::getStatus, 1)); // 1-借阅中
-    if (borrowedCount >= Constants.MAX_BORROW_BOOKS) {
-      throw new CustomException(ResultCode.BORROW_LIMIT_EXCEED);
-    }
+        // 校验用户借阅数量
+        long borrowedCount = count(new LambdaQueryWrapper<BorrowRecord>().eq(BorrowRecord::getUserId, userId).eq(BorrowRecord::getStatus, 1)); // 1-借阅中
+        if (borrowedCount >= Constants.MAX_BORROW_BOOKS) {
+            throw new CustomException(ResultCode.BORROW_LIMIT_EXCEED);
+        }
 
-    // 校验是否已借阅该书
-    BorrowRecord existingRecord = getOne(new LambdaQueryWrapper<BorrowRecord>()
-        .eq(BorrowRecord::getUserId, userId)
-        .eq(BorrowRecord::getBookId, borrowDTO.getBookId())
-        .eq(BorrowRecord::getStatus, 1));
-    if (existingRecord != null) {
-      throw new CustomException(ResultCode.BOOK_ALREADY_BORROWED);
-    }
+        // 校验是否已借阅该书
+        BorrowRecord existingRecord = getOne(new LambdaQueryWrapper<BorrowRecord>().eq(BorrowRecord::getUserId, userId).eq(BorrowRecord::getBookId, borrowDTO.getBookId()).eq(BorrowRecord::getStatus, 1));
+        if (existingRecord != null) {
+            throw new CustomException(ResultCode.BOOK_ALREADY_BORROWED);
+        }
 
-    // 创建借阅记录
-    BorrowRecord borrowRecord = new BorrowRecord();
-    borrowRecord.setUserId(userId);
-    borrowRecord.setBookId(borrowDTO.getBookId());
-    borrowRecord.setBorrowDate(LocalDateTime.now());
-    borrowRecord.setReturnDate(borrowDTO.getReturnDate());
-    borrowRecord.setStatus(0); // 0-待审核
-    borrowRecord.setRenewTimes(0);
+        // 创建借阅记录
+        BorrowRecord borrowRecord = new BorrowRecord();
+        borrowRecord.setUserId(userId);
+        borrowRecord.setBookId(borrowDTO.getBookId());
+        borrowRecord.setBorrowDate(LocalDateTime.now());
+        borrowRecord.setReturnDate(borrowDTO.getReturnDate());
+        borrowRecord.setStatus(0); // 0-待审核
+        borrowRecord.setRenewTimes(0);
 
-    // 保存借阅记录
-    save(borrowRecord);
+        // 保存借阅记录
+        save(borrowRecord);
 
-    return borrowRecord;
-  }
-
-  @Override
-  @Transactional(rollbackFor = Exception.class)
-  public boolean returnBook(Long recordId) {
-    // 查询借阅记录
-    BorrowRecord borrowRecord = getById(recordId);
-    if (borrowRecord == null) {
-      throw new CustomException("借阅记录不存在");
-    }
-    if (borrowRecord.getStatus() != 1) { // 1-借阅中
-      throw new CustomException("该书已归还或状态异常");
+        return borrowRecord;
     }
 
-    // 更新借阅记录状态
-    borrowRecord.setStatus(2); // 1-已归还
-    borrowRecord.setActualReturnDate(LocalDateTime.now());
-    updateById(borrowRecord);
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean returnBook(Long recordId, Integer rating) {
+        // 查询借阅记录
+        BorrowRecord borrowRecord = getById(recordId);
+        if (borrowRecord == null) {
+            throw new CustomException("借阅记录不存在");
+        }
+        if (borrowRecord.getStatus() != 1) { // 1-借阅中
+            throw new CustomException("该书已归还或状态异常");
+        }
 
-    // 更新图书库存
-    bookService.updateStock(borrowRecord.getBookId(), 1);
+        // 更新借阅记录状态
+        borrowRecord.setStatus(2); // 1-已归还
+        borrowRecord.setActualReturnDate(LocalDateTime.now());
+        borrowRecord.setRating(rating);
+        updateById(borrowRecord);
 
-    // 检查是否逾期，更新用户失信值 (简单示例，可根据实际规则调整)
-    if (borrowRecord.getActualReturnDate().isAfter(borrowRecord.getReturnDate())) {
-      User user = userService.getById(borrowRecord.getUserId());
-      if (user != null && user.getCreditScore() < Constants.MAX_CREDIT_SCORE) {
-        user.setCreditScore(user.getCreditScore() + 1);
-        userService.updateById(user);
-      }
-    }
-    return true;
-  }
+        // 更新图书库存
+        bookService.updateStock(borrowRecord.getBookId(), 1);
 
-  @Override
-  @Transactional(rollbackFor = Exception.class)
-  public boolean renew(Long recordId) {
-    // 查询借阅记录
-    BorrowRecord borrowRecord = getById(recordId);
-    if (borrowRecord == null || borrowRecord.getStatus() != 1) { // 1-借阅中
-      throw new CustomException("借阅记录不存在或状态异常");
-    }
-
-    // 检查是否允许续借
-    if (borrowRecord.getRenewTimes() >= 1) { // 假设最多续借1次
-      throw new CustomException(ResultCode.RENEW_NOT_ALLOWED);
-    }
-
-    // 更新应还日期和续借次数
-    borrowRecord.setReturnDate(borrowRecord.getReturnDate().plusDays(Constants.RENEW_DAYS));
-    borrowRecord.setRenewTimes(borrowRecord.getRenewTimes() + 1);
-    return updateById(borrowRecord);
-  }
-
-  @Override
-  public Page<BorrowRecordVO> userBorrows(Page<BorrowRecord> page, Long userId, Integer status) {
-    Page<BorrowRecord> recordPage = page(page, new LambdaQueryWrapper<BorrowRecord>()
-        .eq(userId != null, BorrowRecord::getUserId, userId)
-        .eq(status != null, BorrowRecord::getStatus, status)
-        .orderByDesc(BorrowRecord::getBorrowDate));
-    return convertToVOPage(recordPage);
-  }
-
-  @Override
-  public Page<BorrowRecordVO> pageBorrows(Page<BorrowRecord> page, String username, String bookName, Integer status) {
-    LambdaQueryWrapper<BorrowRecord> queryWrapper = new LambdaQueryWrapper<>();
-
-    if (StringUtils.isNotBlank(username)) {
-      User user = userService.getByUsername(username);
-      queryWrapper.eq(BorrowRecord::getUserId, user.getId());
+        // 检查是否逾期，更新用户失信值 (简单示例，可根据实际规则调整)
+        if (borrowRecord.getActualReturnDate().isAfter(borrowRecord.getReturnDate())) {
+            User user = userService.getById(borrowRecord.getUserId());
+            if (user != null && user.getCreditScore() < Constants.MAX_CREDIT_SCORE) {
+                user.setCreditScore(user.getCreditScore() + 1);
+                userService.updateById(user);
+            }
+        }
+        return true;
     }
 
-    if (StringUtils.isNotBlank(bookName)) {
-      List<Book> books = bookService.list(new LambdaQueryWrapper<Book>().like(Book::getName, bookName));
-      queryWrapper.in(BorrowRecord::getBookId, books.stream().map(Book::getId).collect(Collectors.toList()));
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean renew(Long recordId) {
+        // 查询借阅记录
+        BorrowRecord borrowRecord = getById(recordId);
+        if (borrowRecord == null || borrowRecord.getStatus() != 1) { // 1-借阅中
+            throw new CustomException("借阅记录不存在或状态异常");
+        }
+
+        // 检查是否允许续借
+        if (borrowRecord.getRenewTimes() >= 1) { // 假设最多续借1次
+            throw new CustomException(ResultCode.RENEW_NOT_ALLOWED);
+        }
+
+        // 更新应还日期和续借次数
+        borrowRecord.setReturnDate(borrowRecord.getReturnDate().plusDays(Constants.RENEW_DAYS));
+        borrowRecord.setRenewTimes(borrowRecord.getRenewTimes() + 1);
+        return updateById(borrowRecord);
     }
 
-    queryWrapper.eq(status != null, BorrowRecord::getStatus, status);
-    queryWrapper.orderByDesc(BorrowRecord::getBorrowDate);
-
-    Page<BorrowRecord> recordPage = page(page, queryWrapper);
-    return convertToVOPage(recordPage);
-  }
-
-  @Override
-  public BorrowRecordVO getBorrowDetail(Long recordId) {
-    BorrowRecord record = getById(recordId);
-    if (record == null) {
-      return null;
-    }
-    return convertToVO(record);
-  }
-
-  private Page<BorrowRecordVO> convertToVOPage(Page<BorrowRecord> recordPage) {
-    Page<BorrowRecordVO> voPage = new Page<>(recordPage.getCurrent(), recordPage.getSize(), recordPage.getTotal());
-    List<BorrowRecordVO> voList = recordPage.getRecords().stream()
-        .map(this::convertToVO)
-        .collect(Collectors.toList());
-    voPage.setRecords(voList);
-    return voPage;
-  }
-
-  private BorrowRecordVO convertToVO(BorrowRecord record) {
-    BorrowRecordVO vo = new BorrowRecordVO();
-    BeanUtils.copyProperties(record, vo);
-
-    // 设置用户信息
-    User user = userService.getById(record.getUserId());
-    if (user != null) {
-      vo.setUsername(user.getUsername());
+    @Override
+    public Page<BorrowRecordVO> userBorrows(Page<BorrowRecord> page, Long userId, Integer status) {
+        Page<BorrowRecord> recordPage = page(page, new LambdaQueryWrapper<BorrowRecord>().eq(userId != null, BorrowRecord::getUserId, userId).eq(status != null, BorrowRecord::getStatus, status).orderByDesc(BorrowRecord::getBorrowDate));
+        return convertToVOPage(recordPage);
     }
 
-    // 设置图书信息
-    Book book = bookService.getById(record.getBookId());
-    if (book != null) {
-      vo.setBookName(book.getName());
-      vo.setBookAuthor(book.getAuthor());
-      vo.setBookCover(book.getCover());
+    @Override
+    public Page<BorrowRecordVO> pageBorrows(Page<BorrowRecord> page, String username, String bookName, Integer status) {
+        LambdaQueryWrapper<BorrowRecord> queryWrapper = new LambdaQueryWrapper<>();
+
+        if (StringUtils.isNotBlank(username)) {
+            User user = userService.getByUsername(username);
+            queryWrapper.eq(BorrowRecord::getUserId, user.getId());
+        }
+
+        if (StringUtils.isNotBlank(bookName)) {
+            List<Book> books = bookService.list(new LambdaQueryWrapper<Book>().like(Book::getName, bookName));
+            queryWrapper.in(BorrowRecord::getBookId, books.stream().map(Book::getId).collect(Collectors.toList()));
+        }
+
+        queryWrapper.eq(status != null, BorrowRecord::getStatus, status);
+        queryWrapper.orderByDesc(BorrowRecord::getBorrowDate);
+
+        Page<BorrowRecord> recordPage = page(page, queryWrapper);
+        return convertToVOPage(recordPage);
     }
 
-    // 设置状态描述和是否逾期
-    switch (record.getStatus()) {
-      case 0:
-        vo.setStatusDesc("待审核");
-        break;
-      case 1:
-        vo.setStatusDesc("借阅中");
-        break;
-      case 2:
-        vo.setStatusDesc("已归还");
-        break;
-      case 3:
-        vo.setStatusDesc("逾期未还");
-        break;
-      default:
-        vo.setStatusDesc("未知状态");
+    @Override
+    public BorrowRecordVO getBorrowDetail(Long recordId) {
+        BorrowRecord record = getById(recordId);
+        if (record == null) {
+            return null;
+        }
+        return convertToVO(record);
     }
-    vo.setIsOverdue(record.getStatus() == 1 && record.getReturnDate().isBefore(LocalDateTime.now()));
 
-    return vo;
-  }
-
-  @Override
-  public boolean audit(Long id) {
-    BorrowRecord borrowRecord = getById(id);
-    if (borrowRecord == null) {
-      throw new CustomException("借阅记录不存在");
+    private Page<BorrowRecordVO> convertToVOPage(Page<BorrowRecord> recordPage) {
+        Page<BorrowRecordVO> voPage = new Page<>(recordPage.getCurrent(), recordPage.getSize(), recordPage.getTotal());
+        List<BorrowRecordVO> voList = recordPage.getRecords().stream().map(this::convertToVO).collect(Collectors.toList());
+        voPage.setRecords(voList);
+        return voPage;
     }
-    borrowRecord.setStatus(1);
 
-    // 更新图书库存
-    bookService.updateStock(borrowRecord.getBookId(), -1);
+    private BorrowRecordVO convertToVO(BorrowRecord record) {
+        BorrowRecordVO vo = new BorrowRecordVO();
+        BeanUtils.copyProperties(record, vo);
 
-    return updateById(borrowRecord);
-  }
+        // 设置用户信息
+        User user = userService.getById(record.getUserId());
+        if (user != null) {
+            vo.setUsername(user.getUsername());
+        }
+
+        // 设置图书信息
+        Book book = bookService.getById(record.getBookId());
+        if (book != null) {
+            vo.setBookName(book.getName());
+            vo.setBookAuthor(book.getAuthor());
+            vo.setBookCover(book.getCover());
+        }
+
+        // 设置状态描述和是否逾期
+        switch (record.getStatus()) {
+            case 0:
+                vo.setStatusDesc("待审核");
+                break;
+            case 1:
+                vo.setStatusDesc("借阅中");
+                break;
+            case 2:
+                vo.setStatusDesc("已归还");
+                break;
+            case 3:
+                vo.setStatusDesc("逾期未还");
+                break;
+            default:
+                vo.setStatusDesc("未知状态");
+        }
+        vo.setIsOverdue(record.getStatus() == 1 && record.getReturnDate().isBefore(LocalDateTime.now()));
+
+        return vo;
+    }
+
+    @Override
+    public boolean audit(Long id) {
+        BorrowRecord borrowRecord = getById(id);
+        if (borrowRecord == null) {
+            throw new CustomException("借阅记录不存在");
+        }
+        borrowRecord.setStatus(1);
+
+        // 更新图书库存
+        bookService.updateStock(borrowRecord.getBookId(), -1);
+
+        return updateById(borrowRecord);
+    }
 }

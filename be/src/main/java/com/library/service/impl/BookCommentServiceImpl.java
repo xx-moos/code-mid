@@ -101,13 +101,7 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
     // 检查是否有子评论，如果有，则不直接删除或进行特殊处理
     long childrenCount = this.count(new LambdaQueryWrapper<BookComment>().eq(BookComment::getParentId, commentId));
     if (childrenCount > 0) {
-      // 方案1: 逻辑删除父评论，内容修改为"评论已删除"，子评论保留
-      // comment.setContent("该评论已删除");
-      // comment.setDeleted(1); // 假设BaseEntity有此字段且MP自动处理
-      // updateById(comment);
-      // 方案2: 不允许删除有子评论的评论
       throw new CustomException("该评论下有回复，无法直接删除");
-      // 方案3: 级联逻辑删除 (需要递归)
     }
 
     // 逻辑删除
@@ -172,7 +166,7 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
         vo.setUserAvatar(user.getAvatar());
       }
       // 初步获取直接子评论 (如果需要显示多级，则需要更复杂的递归或多次查询组装)
-      vo.setChildren(getChildrenComments(comment.getId(), userMap));
+      vo.setChildren(getChildrenComments(comment.getId(), userMap, queryDTO.getStatus()));
       return vo;
     }).collect(Collectors.toList());
 
@@ -181,9 +175,10 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
   }
 
   // 辅助方法获取子评论 (递归获取，或只获取一层)
-  private List<BookCommentVO> getChildrenComments(Long parentId, Map<Long, User> userMap) {
+  private List<BookCommentVO> getChildrenComments(Long parentId, Map<Long, User> userMap,Integer status) {
     LambdaQueryWrapper<BookComment> queryWrapper = new LambdaQueryWrapper<>();
     queryWrapper.eq(BookComment::getParentId, parentId);
+    queryWrapper.eq(BookComment::getStatus, status);
     queryWrapper.orderByAsc(BookComment::getCreateTime); // 子评论按时间升序
     List<BookComment> children = list(queryWrapper);
 

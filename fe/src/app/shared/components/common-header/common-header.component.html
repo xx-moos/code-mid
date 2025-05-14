@@ -77,8 +77,23 @@
             >
               <a routerLink="/user-edit">读者注册</a>
             </li>
-            <li [ngClass]="{ 'active-menu': isFullPathActive('/login') }">
+            <li
+              [ngClass]="{ 'active-menu': isFullPathActive('/login') }"
+              *ngIf="!token"
+            >
               <a routerLink="/login">登录</a>
+            </li>
+            <li
+              [ngClass]="{ 'active-menu': isFullPathActive('/login') }"
+              *ngIf="token && userInfo.role == 1"
+            >
+              <a routerLink="/admin/user-list">管理后台</a>
+            </li>
+            <li
+              [ngClass]="{ 'active-menu': isFullPathActive('/login') }"
+              *ngIf="token && userInfo.role == 0"
+            >
+              <a routerLink="/reader/borrow-list">读者后台</a>
             </li>
           </ul>
         </nav>

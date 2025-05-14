@@ -33,6 +33,13 @@ public class BookCollection implements Serializable {
     @TableField("book_id")
     private Long bookId;
 
+
+    /**
+     * 图书
+     */
+    @TableField(exist = false)
+    private String bookName;
+
     /**
      * 收藏时间
      */

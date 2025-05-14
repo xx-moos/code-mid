@@ -86,22 +86,48 @@ export class BorrowListComponent implements OnInit {
     this.loadList(size);
   };
 
-  returnItem = (ids: any) => {
-    this.apiService.post('/borrow/return/' + ids, {}).subscribe(
-      (res: any) => {
-        this.message.success('操作成功');
-        this.loadList(1);
+  rating = 0;
+
+  showReturnItem = (id: any, returnContent: any) => {
+    this.modal.create({
+      nzTitle: '归还图书',
+      nzContent: returnContent,
+      nzFooter: null,
+      nzComponentParams: {
+        id,
       },
-      (err) => {
-        this.message.error(err.message);
-      }
-    );
+    });
+  };
+
+  returnItem = (id: any) => {
+    console.log(`this.rating ->:`, this.rating);
+    if (this.rating == 0) {
+      this.message.error('请先打分');
+      return;
+    }
+
+    this.apiService
+      .get('/borrow/return/' + id, {
+        params: {
+          rating: this.rating,
+        },
+      })
+      .subscribe(
+        (res: any) => {
+          this.message.success('操作成功');
+          this.loadList(1);
+          this.modal.closeAll();
+        },
+        (err) => {
+          this.message.error(err.message);
+        }
+      );
   };
 
   renewItem = (ids: any) => {
     this.apiService.post('/borrow/renew/' + ids, {}).subscribe(
       (res: any) => {
-        console.log(`res ->:`, res)
+        console.log(`res ->:`, res);
         if (res.code != 200) {
           this.message.error(res.message);
           return;

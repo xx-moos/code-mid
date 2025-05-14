@@ -23,14 +23,14 @@
         <a routerLink="/reader/borrow-list">图书借阅管理</a>
       </li>
       <li nz-menu-item nzMatchRouter>
-        <a routerLink="/admin/notice-list">我的收藏</a>
+        <a routerLink="/reader/collect-list">我的收藏</a>
       </li>
       <li nz-menu-item nzMatchRouter>
-        <a routerLink="/admin/notice-list">我的评论</a>
+        <a routerLink="/reader/comment-list">我的评论</a>
       </li>
-      <li nz-menu-item nzMatchRouter>
+      <!-- <li nz-menu-item nzMatchRouter>
         <a routerLink="/admin/notice-list">我的反馈</a>
-      </li>
+      </li> -->
     </ul>
   </nz-sider>
   <nz-layout>
@@ -43,6 +43,7 @@
             [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
           ></span>
         </span>
+        <a [routerLink]="['/']">网站首页</a>
       </div>
     </nz-header>
     <nz-content>

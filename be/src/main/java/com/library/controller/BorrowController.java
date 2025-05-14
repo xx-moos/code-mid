@@ -52,10 +52,10 @@ public class BorrowController {
     }
 
     @ApiOperation("还书")
-    @PostMapping("/return/{recordId}")
+    @GetMapping("/return/{recordId}")
     // @PreAuthorize("isAuthenticated()")
-    public Result<Void> returnBook(@PathVariable Long recordId) {
-        boolean result = borrowService.returnBook(recordId);
+    public Result<Void> returnBook(@PathVariable Long recordId, @RequestParam Integer rating) {
+        boolean result = borrowService.returnBook(recordId, rating);
         return result ? Result.success() : Result.failed("还书失败");
     }
 

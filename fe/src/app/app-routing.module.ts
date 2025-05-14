@@ -21,6 +21,10 @@ import { CommentAdminListComponent } from './pages/comment/admin-list/list.compo
 import { BookInfoComponent } from './pages/book/info/info.component';
 import { CategoryListComponent } from './pages/category/list/list.component';
 
+import { CollectListComponent } from './pages/collection/list/list.component';
+import { CommentListComponent } from './pages/comment/list/list.component';
+import { NoteInfoComponent } from './pages/note/info/list.component';
+
 const routes: Routes = [
   // 公共路由: 登录页
   { path: 'login', component: LoginComponent },
@@ -35,6 +39,7 @@ const routes: Routes = [
       { path: 'book-list', component: ListComponent },
       { path: 'book-info', component: BookInfoComponent },
       { path: 'note-list', component: NoteListComponent },
+      { path: 'note-info', component: NoteInfoComponent },
       { path: 'user-edit', component: UserEditComponent },
     ],
   },
@@ -46,6 +51,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'borrow-list', pathMatch: 'full' }, // 默认重定向到仪表盘
       { path: 'borrow-list', component: BorrowListComponent },
+      { path: 'collect-list', component: CollectListComponent },
+      { path: 'comment-list', component: CommentListComponent },
     ],
   },
   // 管理员区域路由 (需要登录和角色验证 - 在 AuthGuard 中实现或使用 RoleGuard)

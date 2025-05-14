@@ -15,6 +15,8 @@ import dayjs from 'dayjs/esm';
 export class BookInfoComponent implements OnInit {
   validateForm!: UntypedFormGroup;
 
+  token = localStorage.getItem('token');
+
   id: any;
 
   map: any = {};

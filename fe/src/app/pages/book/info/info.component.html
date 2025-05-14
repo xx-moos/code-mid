@@ -44,6 +44,7 @@
             </div>
 
             <button
+              *ngIf="token"
               nz-button
               nzType="primary"
               (click)="borrowBook(map.id, borrowBookModal)"
@@ -54,7 +55,7 @@
             <button
               nz-button
               nzType="primary"
-              *ngIf="!isCollect"
+              *ngIf="!isCollect && token"
               (click)="collectBook(map.id)"
             >
               图书收藏
@@ -64,7 +65,7 @@
               nz-button
               nzDanger
               nzType="primary"
-              *ngIf="isCollect"
+              *ngIf="isCollect && token"
               (click)="deleteCollect(map.id)"
             >
               取消收藏

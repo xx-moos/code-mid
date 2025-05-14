@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 export class CommonHeaderComponent {
   userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
 
+  token = localStorage.getItem('token');
+
   constructor(private router: Router) {
     this.isShowLogin = false;
   }

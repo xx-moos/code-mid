@@ -21,6 +21,8 @@ export class CommentComponent implements OnInit {
   bookId = '';
   validateForm!: UntypedFormGroup;
 
+  token = localStorage.getItem('token');
+
   lists: any[] = [];
 
   selectedComment: any = {};

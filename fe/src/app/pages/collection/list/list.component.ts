@@ -2,15 +2,13 @@ import { Component, type OnInit } from '@angular/core';
 import { ApiService } from '../../../core/services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
 })
-export class CommentListComponent implements OnInit {
+export class CollectListComponent implements OnInit {
   validateForm!: UntypedFormGroup;
 
   loading = false;
@@ -18,29 +16,24 @@ export class CommentListComponent implements OnInit {
   search = {
     current: 1,
     size: 10,
-    bookId: '',
   };
 
-  lists: any = [];
+  lists: any[] = [];
   totalCount = 0;
-
-  // 0-待审核, 1-审核通过，2-审核拒绝
-  statusMap: any = {
-    0: '待审核',
-    1: '审核通过',
-    2: '审核拒绝',
-  };
 
   constructor(
     private apiService: ApiService,
     private message: NzMessageService,
-    private fb: UntypedFormBuilder,
-    private modal: NzModalService,
-    private router: Router
+    private fb: UntypedFormBuilder
   ) {}
 
   ngOnInit() {
     this.loadList(1);
+
+    this.validateForm = this.fb.group({
+      title: ['', []],
+      category: ['', []],
+    });
   }
 
   loadList = (page: number) => {
@@ -50,13 +43,14 @@ export class CommentListComponent implements OnInit {
     this.search.current = page;
 
     this.apiService
-      .get('/api/book-comment/all', { params: this.search })
+      .get('/book-collection/my', { params: this.search })
       .subscribe(
         (res: any) => {
           this.loading = false;
+          console.log(`res ->:`, res);
           var data = res.data;
-          this.lists = data?.records || [];
-          this.totalCount = data?.total || 0;
+          this.lists = data.records || [];
+          this.totalCount = data.total || 0;
         },
         (err) => {
           this.loading = false;
@@ -74,18 +68,9 @@ export class CommentListComponent implements OnInit {
   };
 
   deleteItem = (id: any) => {
-    this.apiService
-      .delete('/api/book-comment/' + id)
-      .subscribe(
-        (res: any) => {
-          this.message.success('成功');
-          this.loadList(1);
-        },
-        (err) => {
-          this.message.error(err.message);
-        }
-      );
+    this.apiService.delete(`/book-collection/${id}`).subscribe((res: any) => {
+      this.message.success('删除成功');
+      this.loadList(1);
+    });
   };
-
-  
 }
