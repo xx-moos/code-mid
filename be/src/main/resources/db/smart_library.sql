@@ -3,15 +3,15 @@
 
  Source Server         : local
  Source Server Type    : MySQL
- Source Server Version : 90300
- Source Host           : 192.168.75.129:3306
+ Source Server Version : 80042
+ Source Host           : 192.168.8.129:3306
  Source Schema         : smart_library
 
  Target Server Type    : MySQL
- Target Server Version : 90300
+ Target Server Version : 80042
  File Encoding         : 65001
 
- Date: 14/05/2025 09:49:14
+ Date: 14/05/2025 11:12:04
 */
 
 SET NAMES utf8mb4;
@@ -33,7 +33,7 @@ CREATE TABLE `announcement`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_publisher_id`(`publisher_id` ASC) USING BTREE,
   INDEX `idx_status`(`status` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书馆公告表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书馆公告表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of announcement
@@ -57,7 +57,7 @@ CREATE TABLE `book`  (
   `cover` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '封面图片路径',
   `stock` int NOT NULL DEFAULT 0 COMMENT '库存数量',
   `borrow_count` int NOT NULL DEFAULT 0 COMMENT '借阅次数',
-  `avg_rating` decimal(2, 1) NOT NULL DEFAULT 0.0 COMMENT '平均评分',
+  `avg_rating` decimal(3, 1) NOT NULL DEFAULT 0.0 COMMENT '综合评分(0-10)',
   `status` tinyint NOT NULL DEFAULT 0 COMMENT '状态：0-可借，1-已下架',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -146,6 +146,23 @@ CREATE TABLE `book_comment`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for book_similarity
+-- ----------------------------
+DROP TABLE IF EXISTS `book_similarity`;
+CREATE TABLE `book_similarity`  (
+  `book_id_1` bigint NOT NULL COMMENT '图书ID 1',
+  `book_id_2` bigint NOT NULL COMMENT '图书ID 2',
+  `similarity_score` double NOT NULL COMMENT '相似度得分',
+  PRIMARY KEY (`book_id_1`, `book_id_2`) USING BTREE,
+  INDEX `idx_book_id_1_score`(`book_id_1` ASC, `similarity_score` DESC) USING BTREE,
+  INDEX `idx_book_id_2`(`book_id_2` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '图书相似度表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of book_similarity
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for borrow_record
 -- ----------------------------
 DROP TABLE IF EXISTS `borrow_record`;
@@ -171,24 +188,6 @@ CREATE TABLE `borrow_record`  (
 
 -- ----------------------------
 -- Records of borrow_record
--- ----------------------------
-
--- ----------------------------
--- Table structure for comment_like
--- ----------------------------
-DROP TABLE IF EXISTS `comment_like`;
-CREATE TABLE `comment_like`  (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `user_id` bigint UNSIGNED NOT NULL COMMENT '用户ID',
-  `comment_id` bigint UNSIGNED NOT NULL COMMENT '评论ID',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uk_user_comment`(`user_id` ASC, `comment_id` ASC) USING BTREE,
-  INDEX `idx_comment_id`(`comment_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '评论点赞表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of comment_like
 -- ----------------------------
 
 -- ----------------------------
