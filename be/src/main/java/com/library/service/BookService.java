@@ -30,4 +30,5 @@ public interface BookService extends IService<Book> {
      */
     boolean updateStock(Long id, Integer stock);
 
-} 
+    List<Book> getHotBooks();
+}
